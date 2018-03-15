@@ -1,0 +1,50 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% EXTRA %%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+NUMBER OF ROBOTS								= 1
+ROBOT 1: X POSITION (meters)		= 0.0
+ROBOT 1: Y POSITION (meters)		= 0.0
+ROBOT 1: ORIENTATION (radians) 	= 0.0
+WRITE TO FILE (0 No, 1 YES )		= 1
+RUN TIME													= 10000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%% ENVIRONMENT %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+NUMBER OF LIGHT OBJECTS  									= 1
+LIGHT 1: X POSITION												= -1
+LIGHT 1: Y POSITION												= 1
+NUMBER OF BLUE LIGHT OBJECTS 							= 1
+BLUE LIGHT 1: X POSITION									= 1
+BLUE LIGHT 1: Y POSITION									= 0
+NUMBER OF RED LIGHT OBJECTS 							= 2
+RED LIGHT 1: X POSITION										= 0.5
+RED LIGHT 1: Y POSITION										= 0.5
+RED LIGHT 1: X POSITION										= -0.5
+RED LIGHT 1: Y POSITION										= -0.5
+NUMBER OF GROUND AREA 										= 1
+GROUND AREA 1 X POSITION									= 0.0
+GROUND AREA 1 Y POSITION									= 0.0
+GROUND AREA 1 RADIUS											= 0.1
+GROUND AREA 1 COLOR (0.0 Black, 0.5 Grey)	= 0.5
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%% SENSORS %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+LIGHT SENSOR RANGE (meters)						= 2.0
+BLUE LIGHT SENSOR RANGE (meters)			= 2.0
+RED LIGHT SENSOR RANGE (meters)				= 1.0
+BATTERY SENSOR RANGE (meters)					= 0.5
+BATTERY CHARGE COEF 									= 0.01
+BATTERY DISCHARGE COEF								= 0.0001
+BLUE BATTERY SENSOR RANGE (meters)		= 0.5
+BLUE BATTERY CHARGE COEF 							= 0.01
+BLUE BATTERY DISCHARGE COEF						= 0.001
+RED BATTERY SENSOR RANGE (meters)			= 0.75
+RED BATTERY CHARGE COEF 							= 0.01
+RED BATTERY DISCHARGE COEF						= 0.0001
+ODOMETRY ERROR                        = 0.0

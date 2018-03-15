@@ -1,0 +1,53 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% EXTRA %%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+NUMBER OF ROBOTS							= 1	
+ROBOT 1: X POSITION (meters)		= 0.0
+ROBOT 1: Y POSITION (meters)		= 0.0
+ROBOT 1: ORIENTATION (radians) 	= 0.0
+WRITE TO FILE (0 No, 1 YES )	= 1
+RUN TIME													= 10000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%% ENVIRONMENT %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+NUMBER OF LIGHT OBJECTS  						= 1
+LIGHT 1 X POSITION (meters) 				= -1.5
+LIGHT 1 Y POSITION (meters)					= -1.5
+NUMBER OF GROUND AREA								= 6
+GROUND AREA 1 X POSITION	(meters)					= 1.3
+GROUND AREA 1 Y POSITION	(meters)					= 1.3
+GROUND AREA 1 RADIUS	(meters)							= 0.5
+GROUND AREA 1 COLOR (0.0 Black, 0.5 Grey)		= 0.0
+GROUND AREA 2 X POSITION	(meters)					= -1
+GROUND AREA 2 Y POSITION	(meters)					= -1
+GROUND AREA 2 RADIUS	(meters)							= 0.3
+GROUND AREA 2 COLOR (0.0 Black, 0.5 Grey)		= 0.5
+GROUND AREA 3 X POSITION	(meters)					= 1
+GROUND AREA 3 Y POSITION	(meters)					= -1
+GROUND AREA 3 RADIUS	(meters)							= 0.3
+GROUND AREA 3 COLOR (0.0 Black, 0.5 Grey)		= 0.5
+GROUND AREA 4 X POSITION	(meters)	 				= -1
+GROUND AREA 4 Y POSITION	(meters)					= 1
+GROUND AREA 4 RADIUS	(meters)							= 0.3
+GROUND AREA 4 COLOR (0.0 Black, 0.5 Grey)		= 0.5
+GROUND AREA 5 X POSITION	(meters)	 				= 0.5
+GROUND AREA 5 Y POSITION	(meters)					= -1
+GROUND AREA 5 RADIUS	(meters)							= 0.2
+GROUND AREA 5 COLOR (0.0 Black, 0.5 Grey)		= 0.5
+GROUND AREA 6 X POSITION	(meters)	 				= -1
+GROUND AREA 6 Y POSITION	(meters)					= 0.5
+GROUND AREA 6 RADIUS	(meters)							= 0.2
+GROUND AREA 6 COLOR (0.0 Black, 0.5 Grey)		= 0.5
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%% SENSORS %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+LIGHT SENSOR RANGE (meters)				= 4.5
+BATTERY SENSOR RANGE (meters)			= 0.5
+BATTERY CHARGE COEF 							= 0.01
+BATTERY DISCHARGE COEF						= 0.0001
+
