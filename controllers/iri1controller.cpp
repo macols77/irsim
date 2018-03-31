@@ -101,7 +101,7 @@ using namespace std;
 #define NEST        5
 #define PREY        6
 
-#define MAX_GROUND_RADIUS 2
+#define MAX_GROUND_RADIUS 2.2
 
 #define BLUE_OBJECT 1
 
@@ -575,7 +575,7 @@ void CIri1Controller::GoGetMoney ( unsigned int un_priority )
   printf("Red light is %2.4f\n", fMaxLight);
   printf("Red battery is  %2.4f\n", redBattery[0]);
 
-  if (redBattery[0] < REDBATTERY_THRESHOLD) {
+  if (redBattery[0] < REDBATTERY_THRESHOLD && fBattToForageInhibitor == 1.0) {
     /*if (fBattToForageInhibitor * fMaxLight > 0.8) {
       m_seRedLight->SwitchNearestLight(0);
     } else if (fBattToForageInhibitor * fMaxLight > 0.0) {
@@ -656,7 +656,7 @@ void CIri1Controller::ComputeActualCell ( unsigned int un_priority )
 
 	/* Leer Encoder */
 	double* encoder = m_seEncoder->GetSensorReading(m_pcEpuck);
-	/* Leer Sensores de Suelo Memory */
+	/* Leer Sensores Memory */
   double* ground = m_seGround->GetSensorReading(m_pcEpuck);
 
   printf("Deliver status %d\n", m_nDeliverStatus);
