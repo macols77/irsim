@@ -34,6 +34,10 @@ public:
 	void GetExtRadius(double *fRadius);
 
 	char* GetName ( void );
+
+	int GetObject() { return m_Object; }
+	int SetObject(int _object) { m_Object = _object; }
+
 private:
 	float m_fGrey;
 	dVector2 m_dCenter;
@@ -41,6 +45,13 @@ private:
 	float m_fExtRadius;
 	float m_fHeight;
 	char m_sName[20];
+
+	// Object that it's "inside" the ground.
+	// -1 - No object
+	// 0  - red object
+	// 1  - blue object
+	// 2  - normal object
+	int m_Object;
 };
 
 /******************************************************************************/

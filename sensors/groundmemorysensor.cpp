@@ -30,6 +30,7 @@ double* CGroundMemorySensor::ComputeSensorReadings(CEpuck* pc_epuck, CSimulator*
 	
 	/* Get Color of the place where the epuck is */
 	CArena* pcArena = pc_simulator->GetArena();
+
 	double* fSensor;
 	fSensor = pcArena->GetGroundAreaColor(vPosition,fOrientation);
 

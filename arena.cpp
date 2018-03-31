@@ -288,26 +288,84 @@ void CArena::SimulationStep(unsigned int n_step_number,
 
     CSimObject::SimulationStep(n_step_number, f_time, f_step_interval);
 
-		/* Get light timing */
+	Environment(n_step_number);
+}
+
+void CArena::Environment(unsigned int n_step_number)
+{
+	printf("Environment started\n");
+
+	static const int TIME_TO_SWITCH_RED_LIGHT = 20000;
+	static const int TIME_TO_SWITCH_BLUE_LIGHT = 2000;
+	static const int TIME_TO_SWITCH_LIGHT = 1000;
+
+	/* Get light timing */
+	if (n_step_number % TIME_TO_SWITCH_LIGHT == 0) {
 		vector<CLightObject*>::iterator it=m_vecLightObject.begin();
-		while(it!=m_vecLightObject.end()){
-			(*it)->Switch((*it)->GetTiming(n_step_number));
+		while(it!=m_vecLightObject.end()) {
+			(*it)->Switch(1.0);
 			it++;
 		}
-		
-		/* Get blue light timing */
+
+		//SetObjectInRandomGround(2);
+	}
+	
+	printf("step %d\n", n_step_number);
+
+	/* Get blue light timing */
+	if (n_step_number % TIME_TO_SWITCH_BLUE_LIGHT == 0) {
 		vector<CBlueLightObject*>::iterator blue_it=m_vecBlueLightObject.begin();
 		while(blue_it!=m_vecBlueLightObject.end()){
-			(*blue_it)->Switch((*blue_it)->GetTiming(n_step_number));
+			(*blue_it)->Switch(1.0);
 			blue_it++;
 		}
-		
-		/* Get blue light timing */
+
+		SetObjectInRandomGroundIfThereIsnt(1);
+	}
+	
+	/* Get red light timing */
+	if (n_step_number % TIME_TO_SWITCH_RED_LIGHT == 0) {
 		vector<CRedLightObject*>::iterator red_it=m_vecRedLightObject.begin();
-		while(red_it!=m_vecRedLightObject.end()){
-			(*red_it)->Switch((*red_it)->GetTiming(n_step_number));
+		while(red_it!=m_vecRedLightObject.end()) {
+			(*red_it)->Switch(1.0);
 			red_it++;
 		}
+
+		//SetObjectInRandomGround(0);
+	}
+
+	printf("Environment ended\n");
+}
+
+void CArena::SetObjectInRandomGroundIfThereIsnt(int object)
+{
+	vector<CGroundArea*>::iterator ground_it =m_vecGroundArea.begin();
+
+	vector<CGroundArea*> m_vecPreyWithoutObject;
+
+	bool isAnObjectInAnyGround = false;
+	while(ground_it!=m_vecGroundArea.end()) {
+		CGroundArea* groundArea = (*ground_it);
+		double groundColor;
+		groundArea->GetColor(&groundColor);
+		// if has no object and it's a prey (grey color)
+		if (groundArea->GetObject() != -1) {
+			isAnObjectInAnyGround = true;
+			break;
+		} else if (groundColor == 0.5) {
+			dVector2 center;
+			groundArea->GetCenter(&center);
+			printf("Added prey with x: %2.2f y: %2.2f\n", center.x, center.y);
+			m_vecPreyWithoutObject.push_back(groundArea);
+		}
+		ground_it++;
+	}
+
+	if (!isAnObjectInAnyGround) {
+		int randGround = rand() % m_vecPreyWithoutObject.size();
+		printf("Setting object %d in groundArea %d\n", object, randGround);
+		m_vecPreyWithoutObject.at(randGround)->SetObject(object);
+	}
 }
 
 /******************************************************************************/
@@ -793,3 +851,100 @@ void CArena::SwitchNearestRedLight (dVector2 Pos, int n_value)
 
 /*****************************************************************************************************/
 /*****************************************************************************************************/
+
+int CArena::GetObjectFromNearestGround (dVector2 Pos)
+{
+	vector<CGroundArea*>::iterator it=m_vecGroundArea.begin();
+	
+	CGroundArea* ground;
+	double nearestDistance = 10000;
+	bool groundFound = false;
+	/* get all the Light Objects */
+	while(it!=m_vecGroundArea.end()) {
+		/* Get the Light Object Position */
+		dVector2 groundObjectPos;
+		(*it)->GetCenter(&groundObjectPos);
+		/* Check the distance to the robot */
+		double distance = sqrt( pow( (groundObjectPos.x - Pos.x), 2 ) + pow( (groundObjectPos.y - Pos.y), 2 ));
+		/* If distance in range */
+		if( distance < nearestDistance ){
+			ground = (CGroundArea*) (*it);
+			nearestDistance = distance;
+		}
+		it++;
+		groundFound = true;
+	}
+
+	if ( groundFound == true ) {
+		int object =  ground->GetObject();
+		return object;
+	}
+
+	return -1;
+}
+
+/*****************************************************************************************************/
+/*****************************************************************************************************/
+
+int CArena::TakeObjectFromNearestGround (dVector2 Pos)
+{
+	vector<CGroundArea*>::iterator it=m_vecGroundArea.begin();
+	
+	CGroundArea* ground;
+	double nearestDistance = 10000;
+	bool groundFound = false;
+	/* get all the Light Objects */
+	while(it!=m_vecGroundArea.end()) {
+		/* Get the Light Object Position */
+		dVector2 groundObjectPos;
+		(*it)->GetCenter(&groundObjectPos);
+		/* Check the distance to the robot */
+		double distance = sqrt( pow( (groundObjectPos.x - Pos.x), 2 ) + pow( (groundObjectPos.y - Pos.y), 2 ));
+		/* If distance in range */
+		if( distance < nearestDistance ){
+			ground = (CGroundArea*) (*it);
+			nearestDistance = distance;
+		}
+		it++;
+		groundFound = true;
+	}
+
+	if ( groundFound == true ) {
+		int object =  ground->GetObject();
+		// Remove object
+		ground->SetObject(-1);
+		return object;
+	}
+
+	return -1;
+}
+
+/*****************************************************************************************************/
+/*****************************************************************************************************/
+
+void CArena::LeaveObjectInNearestGround (dVector2 Pos, int object)
+{
+	vector<CGroundArea*>::iterator it=m_vecGroundArea.begin();
+
+	CGroundArea* ground;
+	double nearestDistance = 10000;
+	bool groundFound = false;
+	/* get all the Light Objects */
+	while(it!=m_vecGroundArea.end()) {
+		/* Get the Light Object Position */
+		dVector2 groundObjectPos;
+		(*it)->GetCenter(&groundObjectPos);
+		/* Check the distance to the robot */
+		double distance = sqrt( pow( (groundObjectPos.x - Pos.x), 2 ) + pow( (groundObjectPos.y - Pos.y), 2 ));
+		/* If distance in range */
+		if( distance < nearestDistance ){
+			ground = (CGroundArea*) (*it);
+			nearestDistance = distance;
+		}
+		it++;
+		groundFound = true;
+	}
+
+	if ( groundFound == true )
+		ground->SetObject(object);
+}

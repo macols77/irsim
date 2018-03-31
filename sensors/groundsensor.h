@@ -39,7 +39,15 @@ public:
 		char* getGroundAreaName( CEpuck *pc_epuck );
     
 		static unsigned int SENSOR_NUMBER;
+
+		// Get object from nearest ground area
+		int GetObjectFromNearestGround();
+		int TakeObjectFromNearestGround();
+		void LeaveObjectInNearestGround(int object);
+
 protected:
+		CArena* m_pcArena;
+		CEpuck* m_pcEpuck;
 };
 
 /******************************************************************************/

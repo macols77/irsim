@@ -38,7 +38,7 @@ double* CLightSensor::ComputeSensorReadings(CEpuck* pc_epuck, CSimulator* pc_sim
 	vPosition.x = (pc_epuck->GetPosition()).x; 
 	vPosition.y = (pc_epuck->GetPosition()).y;
 
-  CArena* pcArena = pc_simulator->GetArena();
+  	CArena* pcArena = pc_simulator->GetArena();
 	m_pcArena = pc_simulator->GetArena();
 
 	m_pcEpuck = pc_epuck;

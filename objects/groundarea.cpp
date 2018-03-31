@@ -15,6 +15,8 @@ CGroundArea::CGroundArea(const char* pch_name) : CGeometry(pch_name)
 	m_fIntRadius=0.0;
 	m_fExtRadius=0.0;
 	m_fGrey=1.0;
+
+	m_Object = -1;
 }
 
 /******************************************************************************/

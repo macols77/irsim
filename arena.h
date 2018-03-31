@@ -113,6 +113,8 @@ class CArena : public CGeometry
 		virtual void Draw(CRender* pc_render);
 
 		virtual void SimulationStep(unsigned int n_step_number, double f_time, double f_step_interval);
+		virtual void Environment(unsigned int n_step_number);
+		virtual void SetObjectInRandomGroundIfThereIsnt(int object);
 
 		virtual double GetGroundColor(dVector2 v_position);
 		virtual char* GetGroundAreaName(dVector2 Pos, double f_orientation);
@@ -183,6 +185,11 @@ class CArena : public CGeometry
 		virtual void SwitchNearestLight(dVector2 Pos, int n_value);
 		virtual void SwitchNearestBlueLight(dVector2 Pos, int n_value);
 		virtual void SwitchNearestRedLight(dVector2 Pos, int n_value);
+
+		// Get object from nearest ground area
+		virtual int GetObjectFromNearestGround(dVector2 pos);
+		virtual int TakeObjectFromNearestGround(dVector2 pos);
+		virtual void LeaveObjectInNearestGround(dVector2 pos, int object);
 
 	protected:
 		virtual void SetSize(double f_size_x, double f_size_y);
