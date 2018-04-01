@@ -94,9 +94,15 @@ iri1controller.o: iri1controller.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/5/bits/locale_facets.tcc \
  /usr/include/c++/5/bits/basic_ios.tcc \
  /usr/include/c++/5/bits/ostream.tcc /usr/include/c++/5/istream \
- /usr/include/c++/5/bits/istream.tcc ../sensors/epuckproximitysensor.h \
- ../sensor.h /usr/include/math.h \
- /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+ /usr/include/c++/5/bits/istream.tcc /usr/include/c++/5/iomanip \
+ /usr/include/c++/5/queue /usr/include/c++/5/deque \
+ /usr/include/c++/5/bits/stl_construct.h \
+ /usr/include/c++/5/bits/stl_uninitialized.h \
+ /usr/include/c++/5/bits/stl_deque.h /usr/include/c++/5/bits/deque.tcc \
+ /usr/include/c++/5/vector /usr/include/c++/5/bits/stl_vector.h \
+ /usr/include/c++/5/bits/stl_bvector.h /usr/include/c++/5/bits/vector.tcc \
+ /usr/include/c++/5/bits/stl_heap.h /usr/include/c++/5/bits/stl_queue.h \
+ /usr/include/math.h /usr/include/x86_64-linux-gnu/bits/math-vector.h \
  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
  /usr/include/x86_64-linux-gnu/bits/huge_val.h \
  /usr/include/x86_64-linux-gnu/bits/huge_valf.h \
@@ -105,14 +111,11 @@ iri1controller.o: iri1controller.cpp /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/nan.h \
  /usr/include/x86_64-linux-gnu/bits/mathdef.h \
  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
- /usr/include/x86_64-linux-gnu/bits/mathinline.h \
- /usr/include/c++/5/vector /usr/include/c++/5/bits/stl_construct.h \
- /usr/include/c++/5/bits/stl_uninitialized.h \
- /usr/include/c++/5/bits/stl_vector.h \
- /usr/include/c++/5/bits/stl_bvector.h /usr/include/c++/5/bits/vector.tcc \
- /usr/include/c++/5/list /usr/include/c++/5/bits/stl_list.h \
- /usr/include/c++/5/bits/list.tcc ../general.h /usr/include/ode/ode.h \
- /usr/include/ode/odeconfig.h \
+ /usr/include/x86_64-linux-gnu/bits/mathinline.h /usr/include/c++/5/ctime \
+ /usr/include/c++/5/cstdlib /usr/include/c++/5/cstdio \
+ ../sensors/epuckproximitysensor.h ../sensor.h /usr/include/c++/5/list \
+ /usr/include/c++/5/bits/stl_list.h /usr/include/c++/5/bits/list.tcc \
+ ../general.h /usr/include/ode/ode.h /usr/include/ode/odeconfig.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include-fixed/limits.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include-fixed/syslimits.h \
  /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
@@ -134,8 +137,7 @@ iri1controller.o: iri1controller.cpp /usr/include/stdc-predef.h \
  /usr/include/ode/collision_trimesh.h /usr/include/ode/threading_impl.h \
  /usr/include/ode/export-dif.h /usr/include/ode/version.h \
  /usr/include/ode/odecpp.h /usr/include/ode/odecpp_collision.h \
- /usr/include/c++/5/iomanip /usr/include/c++/5/fstream \
- /usr/include/c++/5/bits/codecvt.h /usr/include/c++/5/cstdio \
+ /usr/include/c++/5/fstream /usr/include/c++/5/bits/codecvt.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/c++io.h \
  /usr/include/c++/5/bits/fstream.tcc ../simobject.h ../epuck.h ../puck.h \
@@ -148,10 +150,9 @@ iri1controller.o: iri1controller.cpp /usr/include/stdc-predef.h \
  ../arena.h ../sensors/contactsensor.h ../sensors/reallightsensor.h \
  ../sensors/realbluelightsensor.h ../sensors/realredlightsensor.h \
  ../sensors/groundsensor.h ../sensors/groundmemorysensor.h \
- ../sensors/batterysensor.h ../sensors/bluebatterysensor.h \
- ../sensors/redbatterysensor.h ../sensors/encodersensor.h ../random.h \
- ../sensors/compasssensor.h ../actuators/wheelsactuator.h ../actuator.h \
- iri1controller.h ../controller.h
+ ../sensors/batterysensor.h ../sensors/redbatterysensor.h \
+ ../sensors/encodersensor.h ../random.h ../actuators/wheelsactuator.h \
+ ../actuator.h iri1controller.h ../controller.h
 
 /usr/include/stdc-predef.h:
 
@@ -411,9 +412,31 @@ iri1controller.o: iri1controller.cpp /usr/include/stdc-predef.h \
 
 /usr/include/c++/5/bits/istream.tcc:
 
-../sensors/epuckproximitysensor.h:
+/usr/include/c++/5/iomanip:
 
-../sensor.h:
+/usr/include/c++/5/queue:
+
+/usr/include/c++/5/deque:
+
+/usr/include/c++/5/bits/stl_construct.h:
+
+/usr/include/c++/5/bits/stl_uninitialized.h:
+
+/usr/include/c++/5/bits/stl_deque.h:
+
+/usr/include/c++/5/bits/deque.tcc:
+
+/usr/include/c++/5/vector:
+
+/usr/include/c++/5/bits/stl_vector.h:
+
+/usr/include/c++/5/bits/stl_bvector.h:
+
+/usr/include/c++/5/bits/vector.tcc:
+
+/usr/include/c++/5/bits/stl_heap.h:
+
+/usr/include/c++/5/bits/stl_queue.h:
 
 /usr/include/math.h:
 
@@ -437,17 +460,15 @@ iri1controller.o: iri1controller.cpp /usr/include/stdc-predef.h \
 
 /usr/include/x86_64-linux-gnu/bits/mathinline.h:
 
-/usr/include/c++/5/vector:
+/usr/include/c++/5/ctime:
 
-/usr/include/c++/5/bits/stl_construct.h:
+/usr/include/c++/5/cstdlib:
 
-/usr/include/c++/5/bits/stl_uninitialized.h:
+/usr/include/c++/5/cstdio:
 
-/usr/include/c++/5/bits/stl_vector.h:
+../sensors/epuckproximitysensor.h:
 
-/usr/include/c++/5/bits/stl_bvector.h:
-
-/usr/include/c++/5/bits/vector.tcc:
+../sensor.h:
 
 /usr/include/c++/5/list:
 
@@ -531,13 +552,9 @@ iri1controller.o: iri1controller.cpp /usr/include/stdc-predef.h \
 
 /usr/include/ode/odecpp_collision.h:
 
-/usr/include/c++/5/iomanip:
-
 /usr/include/c++/5/fstream:
 
 /usr/include/c++/5/bits/codecvt.h:
-
-/usr/include/c++/5/cstdio:
 
 /usr/include/x86_64-linux-gnu/c++/5/bits/basic_file.h:
 
@@ -603,15 +620,11 @@ iri1controller.o: iri1controller.cpp /usr/include/stdc-predef.h \
 
 ../sensors/batterysensor.h:
 
-../sensors/bluebatterysensor.h:
-
 ../sensors/redbatterysensor.h:
 
 ../sensors/encodersensor.h:
 
 ../random.h:
-
-../sensors/compasssensor.h:
 
 ../actuators/wheelsactuator.h:
 
