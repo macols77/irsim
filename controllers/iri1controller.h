@@ -43,6 +43,7 @@ private:
     double    fBattToForageInhibitor;
     double    fMoneyToForageInhibitor;
     double    fDeliverToSwitchOffInhibitor;
+    double    fLastRandomMovement;  // Ensure convergence
    
     /* Odometry */
     float     m_fOrientation; 
@@ -73,6 +74,8 @@ private:
     bool      m_bIsInPrey;
 
     int       m_nPathPlanningDone;
+    int       m_nStepTime;
+    int       m_nPacketsAttended;
     /* Functions */
 
     void ExecuteBehaviors   ( void );
@@ -82,6 +85,7 @@ private:
     string  pathFind                ( const int &xStart, const int &yStart, const int &xFinish, const int &yFinish );
   
     void PrintMap ( int *print_map  );
+    void SaveStats ( int *print_map  );
     /* Behaviors */
     void ObstacleAvoidance     ( unsigned int un_priority );
     void Navigate              ( unsigned int un_priority );

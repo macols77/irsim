@@ -1,4 +1,5 @@
 /outputFiles/
 *.o
 *.a
-
+!/outputFiles/randomMovementOutput
+!/outputFiles/Plotter*
