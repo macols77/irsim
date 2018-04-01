@@ -62,23 +62,23 @@ void CArena::SetResolution(unsigned int un_res_x, unsigned int un_res_y)
 /******************************************************************************/
 
 void CArena::AddShelter(CCircleCollisionObject* pc_Shelter){
-	m_vecShelters.push_back(pc_Shelter);
-	AddChild(pc_Shelter);
+    m_vecShelters.push_back(pc_Shelter);
+    AddChild(pc_Shelter);
 }
 
 /******************************************************************************/
 /******************************************************************************/
 
 bool CArena::IsUnderShelter(float f_X,float f_Y){
-	vector<CCircleCollisionObject*>::iterator it=m_vecShelters.begin();
-	bool found=false;
-	while(it!=m_vecShelters.end() && !found){
-		dVector2 shelterPos=(*it)->GetPosition();
-		if( sqrt( pow( (shelterPos.x - f_X), 2 ) + pow( (shelterPos.y - f_Y), 2 )) < (*it)->GetRadius())
-				found = true;
-		it++;
-	}
-	return found;
+    vector<CCircleCollisionObject*>::iterator it=m_vecShelters.begin();
+    bool found=false;
+    while(it!=m_vecShelters.end() && !found){
+        dVector2 shelterPos=(*it)->GetPosition();
+        if( sqrt( pow( (shelterPos.x - f_X), 2 ) + pow( (shelterPos.y - f_Y), 2 )) < (*it)->GetRadius())
+                found = true;
+        it++;
+    }
+    return found;
 }
 
 /******************************************************************************/
@@ -93,14 +93,14 @@ dVector2 CArena::GetClosestShelterPosition(float f_X, float f_Y)
 
     while (it != m_vecShelters.end())
     {
-	dVector2 shelterPos = (*it)->GetPosition();
-	double d = sqrt( (shelterPos.x - f_X) * (shelterPos.x - f_X) + (shelterPos.y - f_Y) * (shelterPos.y - f_Y) ); 
-	if (d < minDistance)
-	{
-	    minDistance = d;
-	    closestShelterPos = shelterPos;
-	}
-	it++;
+    dVector2 shelterPos = (*it)->GetPosition();
+    double d = sqrt( (shelterPos.x - f_X) * (shelterPos.x - f_X) + (shelterPos.y - f_Y) * (shelterPos.y - f_Y) ); 
+    if (d < minDistance)
+    {
+        minDistance = d;
+        closestShelterPos = shelterPos;
+    }
+    it++;
     }
 
     dVector2 res;
@@ -115,21 +115,21 @@ dVector2 CArena::GetClosestShelterPosition(float f_X, float f_Y)
 /******************************************************************************/
 
 vector<CCircleCollisionObject*> CArena::GetShelters(){
-	return m_vecShelters;
+    return m_vecShelters;
 }
 
 /******************************************************************************/
 /******************************************************************************/
 
 //vector<CColoredWall*> CArena::GetColoredWalls(){
-	//return m_vecWalls;	
+    //return m_vecWalls;	
 //}
 
 ///******************************************************************************/
 ///******************************************************************************/
 
 //void CArena::AddColoredWall(CColoredWall* pc_wall){
-	//m_vecWalls.push_back(pc_wall);
+    //m_vecWalls.push_back(pc_wall);
 ////	AddChild(pc_wall);
 //}
 
@@ -165,8 +165,8 @@ vector<CCircleCollisionObject*> CArena::GetShelters(){
 /******************************************************************************/
 
 void CArena::AddGroundArea(CGroundArea* pc_ground_area){
-	m_vecGroundArea.push_back(pc_ground_area);
-	AddChild(pc_ground_area);
+    m_vecGroundArea.push_back(pc_ground_area);
+    AddChild(pc_ground_area);
 }
 
 /******************************************************************************/
@@ -175,46 +175,46 @@ void CArena::AddGroundArea(CGroundArea* pc_ground_area){
 double* CArena::GetGroundAreaColor(dVector2 Pos, double f_orientation){
 //davidf: sensors placed like in the real e-puck
 
-	double fSensorsDistance = 0.03;
-	double fSensorsGap = 0.01;
-	vector<CGroundArea*>::iterator it=m_vecGroundArea.begin();
-	double *fcolor = new double[3];
-	fcolor[0]=1.0; //LEFT
-	fcolor[1]=1.0; //CENTER
-	fcolor[2]=1.0; //RIGHT
-	
-	while(it!=m_vecGroundArea.end()){
-		dVector2 groundAreaPos;
-		(*it)->GetCenter(&groundAreaPos);
-		double radius;
-		(*it)->GetExtRadius(&radius);
-		//Check center ground: now at center-front
-		if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)))), 2 )) < radius){
-			(*it)->GetIntRadius(&radius);
-		if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)))), 2 )) > radius){
-				(*it)->GetColor(&fcolor[1]);
-			}
-		}
-		//Check right ground: now at front-right
-		(*it)->GetExtRadius(&radius);
-		if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)+fSensorsGap * sin(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)-fSensorsGap * cos(f_orientation)))), 2 )) < radius){
-			(*it)->GetIntRadius(&radius);
-		if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)+fSensorsGap * sin(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)-fSensorsGap * cos(f_orientation)))), 2 )) > radius){
-				(*it)->GetColor(&fcolor[2]);
-			}
-		}
-		//Check Left ground: now at front-left
-		(*it)->GetExtRadius(&radius);
-		if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)-fSensorsGap * sin(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)+fSensorsGap * cos(f_orientation)))), 2 )) < radius){
-			(*it)->GetIntRadius(&radius);
-		if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)-fSensorsGap * sin(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)+fSensorsGap * cos(f_orientation)))), 2 )) > radius){
-				(*it)->GetColor(&fcolor[0]);
-			}
-		}
+    double fSensorsDistance = 0.03;
+    double fSensorsGap = 0.01;
+    vector<CGroundArea*>::iterator it=m_vecGroundArea.begin();
+    double *fcolor = new double[3];
+    fcolor[0]=1.0; //LEFT
+    fcolor[1]=1.0; //CENTER
+    fcolor[2]=1.0; //RIGHT
+    
+    while(it!=m_vecGroundArea.end()){
+        dVector2 groundAreaPos;
+        (*it)->GetCenter(&groundAreaPos);
+        double radius;
+        (*it)->GetExtRadius(&radius);
+        //Check center ground: now at center-front
+        if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)))), 2 )) < radius){
+            (*it)->GetIntRadius(&radius);
+        if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)))), 2 )) > radius){
+                (*it)->GetColor(&fcolor[1]);
+            }
+        }
+        //Check right ground: now at front-right
+        (*it)->GetExtRadius(&radius);
+        if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)+fSensorsGap * sin(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)-fSensorsGap * cos(f_orientation)))), 2 )) < radius){
+            (*it)->GetIntRadius(&radius);
+        if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)+fSensorsGap * sin(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)-fSensorsGap * cos(f_orientation)))), 2 )) > radius){
+                (*it)->GetColor(&fcolor[2]);
+            }
+        }
+        //Check Left ground: now at front-left
+        (*it)->GetExtRadius(&radius);
+        if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)-fSensorsGap * sin(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)+fSensorsGap * cos(f_orientation)))), 2 )) < radius){
+            (*it)->GetIntRadius(&radius);
+        if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)-fSensorsGap * sin(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)+fSensorsGap * cos(f_orientation)))), 2 )) > radius){
+                (*it)->GetColor(&fcolor[0]);
+            }
+        }
 
-		it++;
-	}
-	return fcolor;
+        it++;
+    }
+    return fcolor;
 }
 
 /******************************************************************************/
@@ -223,30 +223,30 @@ double* CArena::GetGroundAreaColor(dVector2 Pos, double f_orientation){
 char* CArena::GetGroundAreaName(dVector2 Pos, double f_orientation){
 //davidf: sensors placed like in the real e-puck
 
-	float fSensorsDistance = 0.03;
-	float fSensorsGap = 0.01;
-	vector<CGroundArea*>::iterator it=m_vecGroundArea.begin();
+    float fSensorsDistance = 0.03;
+    float fSensorsGap = 0.01;
+    vector<CGroundArea*>::iterator it=m_vecGroundArea.begin();
 
-	char *s_name="none";
+    char *s_name="none";
 
-	while(it!=m_vecGroundArea.end()){
+    while(it!=m_vecGroundArea.end()){
 
-		dVector2 groundAreaPos;
-		(*it)->GetCenter(&groundAreaPos);
-		double radius;
-		(*it)->GetExtRadius(&radius);
-		//Check center ground: now at center-front
-		if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)))), 2 )) < radius){
-			(*it)->GetIntRadius(&radius);
-			if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)))), 2 )) > radius)
-			{
-				s_name = (*it)->GetName();
-				return s_name;
-			}
-		}
-		it++;
-	}
-	return s_name;
+        dVector2 groundAreaPos;
+        (*it)->GetCenter(&groundAreaPos);
+        double radius;
+        (*it)->GetExtRadius(&radius);
+        //Check center ground: now at center-front
+        if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)))), 2 )) < radius){
+            (*it)->GetIntRadius(&radius);
+            if( sqrt( pow( (groundAreaPos.x - (Pos.x + (fSensorsDistance * cos(f_orientation)))), 2 ) + pow( (groundAreaPos.y - (Pos.y + (fSensorsDistance * sin(f_orientation)))), 2 )) > radius)
+            {
+                s_name = (*it)->GetName();
+                return s_name;
+            }
+        }
+        it++;
+    }
+    return s_name;
 }
 
 
@@ -254,7 +254,7 @@ char* CArena::GetGroundAreaName(dVector2 Pos, double f_orientation){
 /******************************************************************************/
 
 vector<CGroundArea*> CArena::GetGroundAreas(){
-	return m_vecGroundArea;
+    return m_vecGroundArea;
 }
 /******************************************************************************/
 /******************************************************************************/
@@ -288,84 +288,84 @@ void CArena::SimulationStep(unsigned int n_step_number,
 
     CSimObject::SimulationStep(n_step_number, f_time, f_step_interval);
 
-	Environment(n_step_number);
+    Environment(n_step_number);
 }
 
 void CArena::Environment(unsigned int n_step_number)
 {
-	printf("Environment started\n");
+    printf("Environment started\n");
 
-	static const int TIME_TO_SWITCH_RED_LIGHT = 20000;
-	static const int TIME_TO_SWITCH_BLUE_LIGHT = 2000;
-	static const int TIME_TO_SWITCH_LIGHT = 1000;
+    static const int TIME_TO_SWITCH_RED_LIGHT = 20000;
+    static const int TIME_TO_SWITCH_BLUE_LIGHT = 2000;
+    static const int TIME_TO_SWITCH_LIGHT = 1000;
 
-	/* Get light timing */
-	if (n_step_number % TIME_TO_SWITCH_LIGHT == 0) {
-		vector<CLightObject*>::iterator it=m_vecLightObject.begin();
-		while(it!=m_vecLightObject.end()) {
-			(*it)->Switch(1.0);
-			it++;
-		}
+    /* Get light timing */
+    if (n_step_number % TIME_TO_SWITCH_LIGHT == 0) {
+        vector<CLightObject*>::iterator it=m_vecLightObject.begin();
+        while(it!=m_vecLightObject.end()) {
+            (*it)->Switch(1.0);
+            it++;
+        }
 
-		//SetObjectInRandomGround(2);
-	}
-	
-	printf("step %d\n", n_step_number);
+        //SetObjectInRandomGround(2);
+    }
+    
+    printf("step %d\n", n_step_number);
 
-	/* Get blue light timing */
-	if (n_step_number % TIME_TO_SWITCH_BLUE_LIGHT == 0) {
-		vector<CBlueLightObject*>::iterator blue_it=m_vecBlueLightObject.begin();
-		while(blue_it!=m_vecBlueLightObject.end()){
-			(*blue_it)->Switch(1.0);
-			blue_it++;
-		}
+    /* Get blue light timing */
+    if (n_step_number % TIME_TO_SWITCH_BLUE_LIGHT == 0) {
+        vector<CBlueLightObject*>::iterator blue_it=m_vecBlueLightObject.begin();
+        while(blue_it!=m_vecBlueLightObject.end()){
+            (*blue_it)->Switch(1.0);
+            blue_it++;
+        }
 
-		SetObjectInRandomGroundIfThereIsnt(1);
-	}
-	
-	/* Get red light timing */
-	if (n_step_number % TIME_TO_SWITCH_RED_LIGHT == 0) {
-		vector<CRedLightObject*>::iterator red_it=m_vecRedLightObject.begin();
-		while(red_it!=m_vecRedLightObject.end()) {
-			(*red_it)->Switch(1.0);
-			red_it++;
-		}
+        SetObjectInRandomGroundIfThereIsnt(1);
+    }
+    
+    /* Get red light timing */
+    if (n_step_number % TIME_TO_SWITCH_RED_LIGHT == 0) {
+        vector<CRedLightObject*>::iterator red_it=m_vecRedLightObject.begin();
+        while(red_it!=m_vecRedLightObject.end()) {
+            (*red_it)->Switch(1.0);
+            red_it++;
+        }
 
-		//SetObjectInRandomGround(0);
-	}
+        //SetObjectInRandomGround(0);
+    }
 
-	printf("Environment ended\n");
+    printf("Environment ended\n");
 }
 
 void CArena::SetObjectInRandomGroundIfThereIsnt(int object)
 {
-	vector<CGroundArea*>::iterator ground_it =m_vecGroundArea.begin();
+    vector<CGroundArea*>::iterator ground_it =m_vecGroundArea.begin();
 
-	vector<CGroundArea*> m_vecPreyWithoutObject;
+    vector<CGroundArea*> m_vecPreyWithoutObject;
 
-	bool isAnObjectInAnyGround = false;
-	while(ground_it!=m_vecGroundArea.end()) {
-		CGroundArea* groundArea = (*ground_it);
-		double groundColor;
-		groundArea->GetColor(&groundColor);
-		// if has no object and it's a prey (grey color)
-		if (groundArea->GetObject() != -1) {
-			isAnObjectInAnyGround = true;
-			break;
-		} else if (groundColor == 0.5) {
-			dVector2 center;
-			groundArea->GetCenter(&center);
-			printf("Added prey with x: %2.2f y: %2.2f\n", center.x, center.y);
-			m_vecPreyWithoutObject.push_back(groundArea);
-		}
-		ground_it++;
-	}
+    bool isAnObjectInAnyGround = false;
+    while(ground_it!=m_vecGroundArea.end()) {
+        CGroundArea* groundArea = (*ground_it);
+        double groundColor;
+        groundArea->GetColor(&groundColor);
+        // if has no object and it's a prey (grey color)
+        if (groundArea->GetObject() != -1) {
+            isAnObjectInAnyGround = true;
+            break;
+        } else if (groundColor == 0.5) {
+            dVector2 center;
+            groundArea->GetCenter(&center);
+            printf("Added prey with x: %2.2f y: %2.2f\n", center.x, center.y);
+            m_vecPreyWithoutObject.push_back(groundArea);
+        }
+        ground_it++;
+    }
 
-	if (!isAnObjectInAnyGround) {
-		int randGround = rand() % m_vecPreyWithoutObject.size();
-		printf("Setting object %d in groundArea %d\n", object, randGround);
-		m_vecPreyWithoutObject.at(randGround)->SetObject(object);
-	}
+    if (!isAnObjectInAnyGround) {
+        int randGround = rand() % m_vecPreyWithoutObject.size();
+        printf("Setting object %d in groundArea %d\n", object, randGround);
+        m_vecPreyWithoutObject.at(randGround)->SetObject(object);
+    }
 }
 
 /******************************************************************************/
@@ -374,33 +374,33 @@ void CArena::SetObjectInRandomGroundIfThereIsnt(int object)
 /******************************************************************************/
 
 vector<CLightObject*> CArena::GetLightObject(){
-	return m_vecLightObject;
+    return m_vecLightObject;
 }
 
 /******************************************************************************/
 /******************************************************************************/
 
 void CArena::AddLightObject(CLightObject* pc_light_object){
-	m_vecLightObject.push_back(pc_light_object);
-	AddChild(pc_light_object);
+    m_vecLightObject.push_back(pc_light_object);
+    AddChild(pc_light_object);
 }
 
 /******************************************************************************/
 /******************************************************************************/
 bool CArena::LightDistance ( dVector2 Pos, double range, double *distance){
-	vector<CLightObject*>::iterator it=m_vecLightObject.begin();
-	while(it!=m_vecLightObject.end()){
-		dVector2 lightObjectPos;
-		(*it)->GetCenter(&lightObjectPos);
-		*distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
-		//if( sqrt( pow( (lampPos.x - Pos.x), 2 ) + pow( (lampPos.y - Pos.y), 2 )) < range){
-		if( *distance  < range){
-			return true;
-		}
-		it++;
-	}
-	return false;
-	}
+    vector<CLightObject*>::iterator it=m_vecLightObject.begin();
+    while(it!=m_vecLightObject.end()){
+        dVector2 lightObjectPos;
+        (*it)->GetCenter(&lightObjectPos);
+        *distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
+        //if( sqrt( pow( (lampPos.x - Pos.x), 2 ) + pow( (lampPos.y - Pos.y), 2 )) < range){
+        if( *distance  < range){
+            return true;
+        }
+        it++;
+    }
+    return false;
+    }
 
 /*****************************************************************************************************/
 /*****************************************************************************************************/
@@ -409,220 +409,220 @@ bool CArena::GetNearestLight ( dVector2 Pos, double range, dVector2 *light_posit
 {
 vector<CLightObject*>::iterator it=m_vecLightObject.begin();
 
-	*nearestDistance = range;
-	/* get all the Light Objects */
-	while(it!=m_vecLightObject.end()){
-		/* If on */
-		if ((*it)->GetStatus())
-		{
-			/* Get tje Light Object Position */
-			dVector2 lightObjectPos;
-			(*it)->GetCenter(&lightObjectPos);
-			/* Check the distance to the robot */
-			double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
-			/* If distance in range */
-			if( (distance  < range) && (distance < *nearestDistance)){
-				*nearestDistance = distance;
-				(*light_position).x = lightObjectPos.x;
-				(*light_position).y = lightObjectPos.y;
-			}
-		}
-		it++;
-	}
+    *nearestDistance = range;
+    /* get all the Light Objects */
+    while(it!=m_vecLightObject.end()){
+        /* If on */
+        if ((*it)->GetStatus())
+        {
+            /* Get tje Light Object Position */
+            dVector2 lightObjectPos;
+            (*it)->GetCenter(&lightObjectPos);
+            /* Check the distance to the robot */
+            double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
+            /* If distance in range */
+            if( (distance  < range) && (distance < *nearestDistance)){
+                *nearestDistance = distance;
+                (*light_position).x = lightObjectPos.x;
+                (*light_position).y = lightObjectPos.y;
+            }
+        }
+        it++;
+    }
 
-	if (*nearestDistance != range )
-		return true;
-	else
-		return false;
+    if (*nearestDistance != range )
+        return true;
+    else
+        return false;
 }
 
 /*****************************************************************************************************/
 /*****************************************************************************************************/
 bool CArena::GetNearestLightInSector ( dVector2 Pos, double f_orientation, double f_aperture, double range, dVector2 *light_position, double *nearestDistance, double *relativeAngle)
 {
-	vector<CLightObject*>::iterator it=m_vecLightObject.begin();
+    vector<CLightObject*>::iterator it=m_vecLightObject.begin();
 
-	double fMaxOrientation = 0.0;
-	double fMinOrientation = 0.0;
+    double fMaxOrientation = 0.0;
+    double fMinOrientation = 0.0;
 
-	*nearestDistance = range;
-	/* get all the Light Objects */
-	while(it!=m_vecLightObject.end()){
-		/* If on */
-		if ((*it)->GetStatus())
-		{
-			//printf("Light on\n");
+    *nearestDistance = range;
+    /* get all the Light Objects */
+    while(it!=m_vecLightObject.end()){
+        /* If on */
+        if ((*it)->GetStatus())
+        {
+            //printf("Light on\n");
 
-			/* Get the Light Object Position */
-			dVector2 lightObjectPos;
-			(*it)->GetCenter(&lightObjectPos);
-			/* Check the distance to the robot */
-			double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
-			/* If distance in range */
-			if( (distance  < range) && (distance < *nearestDistance))
-			{
-				//printf("Light in range\n");
-				/* Check if in sector */
-				/* Calc absolute incidence light beam angle */
-				double fRobotLightAngle = atan2((lightObjectPos.y - Pos.y),(lightObjectPos.x - Pos.x));
-				//fRobotLightAngle = NormalizeAngle(fRobotLightAngle);
-				//printf("fRobotLight: %2.4f\n", fRobotLightAngle);
+            /* Get the Light Object Position */
+            dVector2 lightObjectPos;
+            (*it)->GetCenter(&lightObjectPos);
+            /* Check the distance to the robot */
+            double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
+            /* If distance in range */
+            if( (distance  < range) && (distance < *nearestDistance))
+            {
+                //printf("Light in range\n");
+                /* Check if in sector */
+                /* Calc absolute incidence light beam angle */
+                double fRobotLightAngle = atan2((lightObjectPos.y - Pos.y),(lightObjectPos.x - Pos.x));
+                //fRobotLightAngle = NormalizeAngle(fRobotLightAngle);
+                //printf("fRobotLight: %2.4f\n", fRobotLightAngle);
 
-				/* Calc Sector */
-				double fRelAngle = fRobotLightAngle - f_orientation;
-				if (fabs(fRelAngle) > M_PI )
-				{
-					if (fRobotLightAngle > f_orientation )
-						f_orientation += 2*M_PI;
-					else
-						fRobotLightAngle += 2*M_PI;
-				}	
-				
-				fRelAngle = fRobotLightAngle - f_orientation;
+                /* Calc Sector */
+                double fRelAngle = fRobotLightAngle - f_orientation;
+                if (fabs(fRelAngle) > M_PI )
+                {
+                    if (fRobotLightAngle > f_orientation )
+                        f_orientation += 2*M_PI;
+                    else
+                        fRobotLightAngle += 2*M_PI;
+                }	
+                
+                fRelAngle = fRobotLightAngle - f_orientation;
 
-				if (fabs(fRelAngle) <= f_aperture )
-				{
-					//printf("Light in Sector\n");
-					*nearestDistance = distance;
-					*relativeAngle   = fRelAngle;
-					(*light_position).x = lightObjectPos.x;
-					(*light_position).y = lightObjectPos.y;
-				}
-			}
-		}
-		it++;
-	}
+                if (fabs(fRelAngle) <= f_aperture )
+                {
+                    //printf("Light in Sector\n");
+                    *nearestDistance = distance;
+                    *relativeAngle   = fRelAngle;
+                    (*light_position).x = lightObjectPos.x;
+                    (*light_position).y = lightObjectPos.y;
+                }
+            }
+        }
+        it++;
+    }
 
-	if (*nearestDistance != range )
-		return true;
-	else
-		return false;
+    if (*nearestDistance != range )
+        return true;
+    else
+        return false;
 }
 
 /*****************************************************************************************************/
 /*****************************************************************************************************/
 bool CArena::GetNearestBlueLightInSector ( dVector2 Pos, double f_orientation, double f_aperture, double range, dVector2 *light_position, double *nearestDistance, double *relativeAngle)
 {
-	vector<CBlueLightObject*>::iterator it=m_vecBlueLightObject.begin();
+    vector<CBlueLightObject*>::iterator it=m_vecBlueLightObject.begin();
 
-	double fMaxOrientation = 0.0;
-	double fMinOrientation = 0.0;
+    double fMaxOrientation = 0.0;
+    double fMinOrientation = 0.0;
 
-	*nearestDistance = range;
-	/* get all the Light Objects */
-	while(it!=m_vecBlueLightObject.end()){
-		/* If on */
-		if ((*it)->GetStatus())
-		{
-			//printf("Light on\n");
+    *nearestDistance = range;
+    /* get all the Light Objects */
+    while(it!=m_vecBlueLightObject.end()){
+        /* If on */
+        if ((*it)->GetStatus())
+        {
+            //printf("Light on\n");
 
-			/* Get the Light Object Position */
-			dVector2 lightObjectPos;
-			(*it)->GetCenter(&lightObjectPos);
-			/* Check the distance to the robot */
-			double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
-			/* If distance in range */
-			if( (distance  < range) && (distance < *nearestDistance))
-			{
-				//printf("Light in range\n");
-				/* Check if in sector */
-				/* Calc absolute incidence light beam angle */
-				double fRobotLightAngle = atan2((lightObjectPos.y - Pos.y),(lightObjectPos.x - Pos.x));
-				//fRobotLightAngle = NormalizeAngle(fRobotLightAngle);
-				//printf("fRobotLight: %2.4f\n", fRobotLightAngle);
+            /* Get the Light Object Position */
+            dVector2 lightObjectPos;
+            (*it)->GetCenter(&lightObjectPos);
+            /* Check the distance to the robot */
+            double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
+            /* If distance in range */
+            if( (distance  < range) && (distance < *nearestDistance))
+            {
+                //printf("Light in range\n");
+                /* Check if in sector */
+                /* Calc absolute incidence light beam angle */
+                double fRobotLightAngle = atan2((lightObjectPos.y - Pos.y),(lightObjectPos.x - Pos.x));
+                //fRobotLightAngle = NormalizeAngle(fRobotLightAngle);
+                //printf("fRobotLight: %2.4f\n", fRobotLightAngle);
 
-				/* Calc Sector */
-				double fRelAngle = fRobotLightAngle - f_orientation;
-				if (fabs(fRelAngle) > M_PI )
-				{
-					if (fRobotLightAngle > f_orientation )
-						f_orientation += 2*M_PI;
-					else
-						fRobotLightAngle += 2*M_PI;
-				}	
-				
-				fRelAngle = fRobotLightAngle - f_orientation;
+                /* Calc Sector */
+                double fRelAngle = fRobotLightAngle - f_orientation;
+                if (fabs(fRelAngle) > M_PI )
+                {
+                    if (fRobotLightAngle > f_orientation )
+                        f_orientation += 2*M_PI;
+                    else
+                        fRobotLightAngle += 2*M_PI;
+                }	
+                
+                fRelAngle = fRobotLightAngle - f_orientation;
 
-				if (fabs(fRelAngle) <= f_aperture )
-				{
-					//printf("Light in Sector\n");
-					*nearestDistance = distance;
-					*relativeAngle   = fRelAngle;
-					(*light_position).x = lightObjectPos.x;
-					(*light_position).y = lightObjectPos.y;
-				}
-			}
-		}
-		it++;
-	}
+                if (fabs(fRelAngle) <= f_aperture )
+                {
+                    //printf("Light in Sector\n");
+                    *nearestDistance = distance;
+                    *relativeAngle   = fRelAngle;
+                    (*light_position).x = lightObjectPos.x;
+                    (*light_position).y = lightObjectPos.y;
+                }
+            }
+        }
+        it++;
+    }
 
-	if (*nearestDistance != range )
-		return true;
-	else
-		return false;
+    if (*nearestDistance != range )
+        return true;
+    else
+        return false;
 }
 
 /*****************************************************************************************************/
 /*****************************************************************************************************/
 bool CArena::GetNearestRedLightInSector ( dVector2 Pos, double f_orientation, double f_aperture, double range, dVector2 *light_position, double *nearestDistance, double *relativeAngle)
 {
-	vector<CRedLightObject*>::iterator it=m_vecRedLightObject.begin();
+    vector<CRedLightObject*>::iterator it=m_vecRedLightObject.begin();
 
-	double fMaxOrientation = 0.0;
-	double fMinOrientation = 0.0;
+    double fMaxOrientation = 0.0;
+    double fMinOrientation = 0.0;
 
-	*nearestDistance = range;
-	/* get all the Light Objects */
-	while(it!=m_vecRedLightObject.end()){
-		/* If on */
-		if ((*it)->GetStatus())
-		{
-			//printf("Light on\n");
+    *nearestDistance = range;
+    /* get all the Light Objects */
+    while(it!=m_vecRedLightObject.end()){
+        /* If on */
+        if ((*it)->GetStatus())
+        {
+            //printf("Light on\n");
 
-			/* Get the Light Object Position */
-			dVector2 lightObjectPos;
-			(*it)->GetCenter(&lightObjectPos);
-			/* Check the distance to the robot */
-			double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
-			/* If distance in range */
-			if( (distance  < range) && (distance < *nearestDistance))
-			{
-				//printf("Light in range\n");
-				/* Check if in sector */
-				/* Calc absolute incidence light beam angle */
-				double fRobotLightAngle = atan2((lightObjectPos.y - Pos.y),(lightObjectPos.x - Pos.x));
-				//fRobotLightAngle = NormalizeAngle(fRobotLightAngle);
-				//printf("fRobotLight: %2.4f\n", fRobotLightAngle);
+            /* Get the Light Object Position */
+            dVector2 lightObjectPos;
+            (*it)->GetCenter(&lightObjectPos);
+            /* Check the distance to the robot */
+            double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
+            /* If distance in range */
+            if( (distance  < range) && (distance < *nearestDistance))
+            {
+                //printf("Light in range\n");
+                /* Check if in sector */
+                /* Calc absolute incidence light beam angle */
+                double fRobotLightAngle = atan2((lightObjectPos.y - Pos.y),(lightObjectPos.x - Pos.x));
+                //fRobotLightAngle = NormalizeAngle(fRobotLightAngle);
+                //printf("fRobotLight: %2.4f\n", fRobotLightAngle);
 
-				/* Calc Sector */
-				double fRelAngle = fRobotLightAngle - f_orientation;
-				if (fabs(fRelAngle) > M_PI )
-				{
-					if (fRobotLightAngle > f_orientation )
-						f_orientation += 2*M_PI;
-					else
-						fRobotLightAngle += 2*M_PI;
-				}	
-				
-				fRelAngle = fRobotLightAngle - f_orientation;
+                /* Calc Sector */
+                double fRelAngle = fRobotLightAngle - f_orientation;
+                if (fabs(fRelAngle) > M_PI )
+                {
+                    if (fRobotLightAngle > f_orientation )
+                        f_orientation += 2*M_PI;
+                    else
+                        fRobotLightAngle += 2*M_PI;
+                }	
+                
+                fRelAngle = fRobotLightAngle - f_orientation;
 
-				if (fabs(fRelAngle) <= f_aperture )
-				{
-					//printf("Light in Sector\n");
-					*nearestDistance = distance;
-					*relativeAngle   = fRelAngle;
-					(*light_position).x = lightObjectPos.x;
-					(*light_position).y = lightObjectPos.y;
-				}
-			}
-		}
-		it++;
-	}
+                if (fabs(fRelAngle) <= f_aperture )
+                {
+                    //printf("Light in Sector\n");
+                    *nearestDistance = distance;
+                    *relativeAngle   = fRelAngle;
+                    (*light_position).x = lightObjectPos.x;
+                    (*light_position).y = lightObjectPos.y;
+                }
+            }
+        }
+        it++;
+    }
 
-	if (*nearestDistance != range )
-		return true;
-	else
-		return false;
+    if (*nearestDistance != range )
+        return true;
+    else
+        return false;
 }
 
 /*****************************************************************************************************/
@@ -630,62 +630,62 @@ bool CArena::GetNearestRedLightInSector ( dVector2 Pos, double f_orientation, do
 
 void CArena::SwitchNearestLight (dVector2 Pos, int n_value)
 {
-	vector<CLightObject*>::iterator it=m_vecLightObject.begin();
-	
-	CLightObject* light;
-	double nearestDistance = 10000;
-	bool lightFound = false;
-	/* get all the Light Objects */
-	while(it!=m_vecLightObject.end()){
-		/* Get the Light Object Position */
-		dVector2 lightObjectPos;
-		(*it)->GetCenter(&lightObjectPos);
-		/* Check the distance to the robot */
-		double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
-		/* If distance in range */
-		if( distance < nearestDistance ){
-			light = (CLightObject*) (*it);
-			nearestDistance = distance;
-		}
-		it++;
-		lightFound = true;
-	}
+    vector<CLightObject*>::iterator it=m_vecLightObject.begin();
+    
+    CLightObject* light;
+    double nearestDistance = 10000;
+    bool lightFound = false;
+    /* get all the Light Objects */
+    while(it!=m_vecLightObject.end()){
+        /* Get the Light Object Position */
+        dVector2 lightObjectPos;
+        (*it)->GetCenter(&lightObjectPos);
+        /* Check the distance to the robot */
+        double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
+        /* If distance in range */
+        if( distance < nearestDistance ){
+            light = (CLightObject*) (*it);
+            nearestDistance = distance;
+        }
+        it++;
+        lightFound = true;
+    }
 
-	if ( lightFound == true )
-		light->Switch(n_value);
+    if ( lightFound == true )
+        light->Switch(n_value);
 }
 
 /*****************************************************************************************************/
 /*****************************************************************************************************/
 
 vector<CBlueLightObject*> CArena::GetBlueLightObject(){
-	return m_vecBlueLightObject;
+    return m_vecBlueLightObject;
 }
 
 /******************************************************************************/
 /******************************************************************************/
 
 void CArena::AddBlueLightObject(CBlueLightObject* pc_blue_light_object){
-	m_vecBlueLightObject.push_back(pc_blue_light_object);
-	AddChild(pc_blue_light_object);
+    m_vecBlueLightObject.push_back(pc_blue_light_object);
+    AddChild(pc_blue_light_object);
 }
 
 /******************************************************************************/
 /******************************************************************************/
 bool CArena::BlueLightDistance ( dVector2 Pos, double range, double *distance){
-	vector<CBlueLightObject*>::iterator it=m_vecBlueLightObject.begin();
-	while(it!=m_vecBlueLightObject.end()){
-		dVector2 lightObjectPos;
-		(*it)->GetCenter(&lightObjectPos);
-		*distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
-		//if( sqrt( pow( (lampPos.x - Pos.x), 2 ) + pow( (lampPos.y - Pos.y), 2 )) < range){
-		if( *distance  < range){
-			return true;
-		}
-		it++;
-	}
-	return false;
-	}
+    vector<CBlueLightObject*>::iterator it=m_vecBlueLightObject.begin();
+    while(it!=m_vecBlueLightObject.end()){
+        dVector2 lightObjectPos;
+        (*it)->GetCenter(&lightObjectPos);
+        *distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
+        //if( sqrt( pow( (lampPos.x - Pos.x), 2 ) + pow( (lampPos.y - Pos.y), 2 )) < range){
+        if( *distance  < range){
+            return true;
+        }
+        it++;
+    }
+    return false;
+    }
 
 /*****************************************************************************************************/
 /*****************************************************************************************************/
@@ -693,33 +693,33 @@ bool CArena::BlueLightDistance ( dVector2 Pos, double range, double *distance){
 
 bool CArena::GetNearestBlueLight ( dVector2 Pos, double range, dVector2 *light_position, double *nearestDistance)
 {
-	vector<CBlueLightObject*>::iterator it=m_vecBlueLightObject.begin();
-	
-	*nearestDistance = range;
-	/* get all the Light Objects */
-	while(it!=m_vecBlueLightObject.end()){
-		/* If on */
-		if ((*it)->GetStatus())
-		{
-			/* Get tje Light Object Position */
-			dVector2 lightObjectPos;
-			(*it)->GetCenter(&lightObjectPos);
-			/* Check the distance to the robot */
-			double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
-			/* If distance in range */
-			if( (distance  < range) && (distance < *nearestDistance)){
-				*nearestDistance = distance;
-				(*light_position).x = lightObjectPos.x;
-				(*light_position).y = lightObjectPos.y;
-			}
-		}
-		it++;
-	}
+    vector<CBlueLightObject*>::iterator it=m_vecBlueLightObject.begin();
+    
+    *nearestDistance = range;
+    /* get all the Light Objects */
+    while(it!=m_vecBlueLightObject.end()){
+        /* If on */
+        if ((*it)->GetStatus())
+        {
+            /* Get tje Light Object Position */
+            dVector2 lightObjectPos;
+            (*it)->GetCenter(&lightObjectPos);
+            /* Check the distance to the robot */
+            double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
+            /* If distance in range */
+            if( (distance  < range) && (distance < *nearestDistance)){
+                *nearestDistance = distance;
+                (*light_position).x = lightObjectPos.x;
+                (*light_position).y = lightObjectPos.y;
+            }
+        }
+        it++;
+    }
 
-	if (*nearestDistance != range )
-		return true;
-	else
-		return false;
+    if (*nearestDistance != range )
+        return true;
+    else
+        return false;
 }
 
 /*****************************************************************************************************/
@@ -727,62 +727,62 @@ bool CArena::GetNearestBlueLight ( dVector2 Pos, double range, dVector2 *light_p
 
 void CArena::SwitchNearestBlueLight (dVector2 Pos, int n_value)
 {
-	vector<CBlueLightObject*>::iterator it=m_vecBlueLightObject.begin();
-	
-	CBlueLightObject* light;
-	double nearestDistance = 10000;
-	bool lightFound = false;
-	/* get all the Light Objects */
-	while(it!=m_vecBlueLightObject.end()){
-		/* Get the Light Object Position */
-		dVector2 lightObjectPos;
-		(*it)->GetCenter(&lightObjectPos);
-		/* Check the distance to the robot */
-		double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
-		/* If distance in range */
-		if( distance < nearestDistance ){
-			light = (CBlueLightObject*) (*it);
-			nearestDistance = distance;
-		}
-		it++;
-		lightFound = true;
-	}
+    vector<CBlueLightObject*>::iterator it=m_vecBlueLightObject.begin();
+    
+    CBlueLightObject* light;
+    double nearestDistance = 10000;
+    bool lightFound = false;
+    /* get all the Light Objects */
+    while(it!=m_vecBlueLightObject.end()){
+        /* Get the Light Object Position */
+        dVector2 lightObjectPos;
+        (*it)->GetCenter(&lightObjectPos);
+        /* Check the distance to the robot */
+        double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
+        /* If distance in range */
+        if( distance < nearestDistance ){
+            light = (CBlueLightObject*) (*it);
+            nearestDistance = distance;
+        }
+        it++;
+        lightFound = true;
+    }
 
-	if ( lightFound == true )
-		light->Switch(n_value);
+    if ( lightFound == true )
+        light->Switch(n_value);
 }
 
 /*****************************************************************************************************/
 /*****************************************************************************************************/
 
 vector<CRedLightObject*> CArena::GetRedLightObject(){
-	return m_vecRedLightObject;
+    return m_vecRedLightObject;
 }
 
 /******************************************************************************/
 /******************************************************************************/
 
 void CArena::AddRedLightObject(CRedLightObject* pc_red_light_object){
-	m_vecRedLightObject.push_back(pc_red_light_object);
-	AddChild(pc_red_light_object);
+    m_vecRedLightObject.push_back(pc_red_light_object);
+    AddChild(pc_red_light_object);
 }
 
 /******************************************************************************/
 /******************************************************************************/
 bool CArena::RedLightDistance ( dVector2 Pos, double range, double *distance){
-	vector<CRedLightObject*>::iterator it=m_vecRedLightObject.begin();
-	while(it!=m_vecRedLightObject.end()){
-		dVector2 lightObjectPos;
-		(*it)->GetCenter(&lightObjectPos);
-		*distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
-		//if( sqrt( pow( (lampPos.x - Pos.x), 2 ) + pow( (lampPos.y - Pos.y), 2 )) < range){
-		if( *distance  < range){
-			return true;
-		}
-		it++;
-	}
-	return false;
-	}
+    vector<CRedLightObject*>::iterator it=m_vecRedLightObject.begin();
+    while(it!=m_vecRedLightObject.end()){
+        dVector2 lightObjectPos;
+        (*it)->GetCenter(&lightObjectPos);
+        *distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
+        //if( sqrt( pow( (lampPos.x - Pos.x), 2 ) + pow( (lampPos.y - Pos.y), 2 )) < range){
+        if( *distance  < range){
+            return true;
+        }
+        it++;
+    }
+    return false;
+    }
 
 /*****************************************************************************************************/
 /*****************************************************************************************************/
@@ -790,33 +790,33 @@ bool CArena::RedLightDistance ( dVector2 Pos, double range, double *distance){
 
 bool CArena::GetNearestRedLight ( dVector2 Pos, double range, dVector2 *light_position, double *nearestDistance)
 {
-	vector<CRedLightObject*>::iterator it=m_vecRedLightObject.begin();
-	
-	*nearestDistance = range;
-	/* get all the Light Objects */
-	while(it!=m_vecRedLightObject.end()){
-		/* If on */
-		if ((*it)->GetStatus())
-		{
-			/* Get tje Light Object Position */
-			dVector2 lightObjectPos;
-			(*it)->GetCenter(&lightObjectPos);
-			/* Check the distance to the robot */
-			double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
-			/* If distance in range */
-			if( (distance  < range) && (distance < *nearestDistance)){
-				*nearestDistance = distance;
-				(*light_position).x = lightObjectPos.x;
-				(*light_position).y = lightObjectPos.y;
-			}
-		}
-		it++;
-	}
+    vector<CRedLightObject*>::iterator it=m_vecRedLightObject.begin();
+    
+    *nearestDistance = range;
+    /* get all the Light Objects */
+    while(it!=m_vecRedLightObject.end()){
+        /* If on */
+        if ((*it)->GetStatus())
+        {
+            /* Get tje Light Object Position */
+            dVector2 lightObjectPos;
+            (*it)->GetCenter(&lightObjectPos);
+            /* Check the distance to the robot */
+            double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
+            /* If distance in range */
+            if( (distance  < range) && (distance < *nearestDistance)){
+                *nearestDistance = distance;
+                (*light_position).x = lightObjectPos.x;
+                (*light_position).y = lightObjectPos.y;
+            }
+        }
+        it++;
+    }
 
-	if (*nearestDistance != range )
-		return true;
-	else
-		return false;
+    if (*nearestDistance != range )
+        return true;
+    else
+        return false;
 }
 
 /*****************************************************************************************************/
@@ -824,29 +824,29 @@ bool CArena::GetNearestRedLight ( dVector2 Pos, double range, dVector2 *light_po
 
 void CArena::SwitchNearestRedLight (dVector2 Pos, int n_value)
 {
-	vector<CRedLightObject*>::iterator it=m_vecRedLightObject.begin();
-	
-	CRedLightObject* light;
-	double nearestDistance = 10000;
-	bool lightFound = false;
-	/* get all the Light Objects */
-	while(it!=m_vecRedLightObject.end()){
-		/* Get the Light Object Position */
-		dVector2 lightObjectPos;
-		(*it)->GetCenter(&lightObjectPos);
-		/* Check the distance to the robot */
-		double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
-		/* If distance in range */
-		if( distance < nearestDistance ){
-			light = (CRedLightObject*) (*it);
-			nearestDistance = distance;
-		}
-		it++;
-		lightFound = true;
-	}
+    vector<CRedLightObject*>::iterator it=m_vecRedLightObject.begin();
+    
+    CRedLightObject* light;
+    double nearestDistance = 10000;
+    bool lightFound = false;
+    /* get all the Light Objects */
+    while(it!=m_vecRedLightObject.end()){
+        /* Get the Light Object Position */
+        dVector2 lightObjectPos;
+        (*it)->GetCenter(&lightObjectPos);
+        /* Check the distance to the robot */
+        double distance = sqrt( pow( (lightObjectPos.x - Pos.x), 2 ) + pow( (lightObjectPos.y - Pos.y), 2 ));
+        /* If distance in range */
+        if( distance < nearestDistance ){
+            light = (CRedLightObject*) (*it);
+            nearestDistance = distance;
+        }
+        it++;
+        lightFound = true;
+    }
 
-	if ( lightFound == true )
-		light->Switch(n_value);
+    if ( lightFound == true )
+        light->Switch(n_value);
 }
 
 /*****************************************************************************************************/
@@ -854,33 +854,33 @@ void CArena::SwitchNearestRedLight (dVector2 Pos, int n_value)
 
 int CArena::GetObjectFromNearestGround (dVector2 Pos)
 {
-	vector<CGroundArea*>::iterator it=m_vecGroundArea.begin();
-	
-	CGroundArea* ground;
-	double nearestDistance = 10000;
-	bool groundFound = false;
-	/* get all the Light Objects */
-	while(it!=m_vecGroundArea.end()) {
-		/* Get the Light Object Position */
-		dVector2 groundObjectPos;
-		(*it)->GetCenter(&groundObjectPos);
-		/* Check the distance to the robot */
-		double distance = sqrt( pow( (groundObjectPos.x - Pos.x), 2 ) + pow( (groundObjectPos.y - Pos.y), 2 ));
-		/* If distance in range */
-		if( distance < nearestDistance ){
-			ground = (CGroundArea*) (*it);
-			nearestDistance = distance;
-		}
-		it++;
-		groundFound = true;
-	}
+    vector<CGroundArea*>::iterator it=m_vecGroundArea.begin();
+    
+    CGroundArea* ground;
+    double nearestDistance = 10000;
+    bool groundFound = false;
+    /* get all the Light Objects */
+    while(it!=m_vecGroundArea.end()) {
+        /* Get the Light Object Position */
+        dVector2 groundObjectPos;
+        (*it)->GetCenter(&groundObjectPos);
+        /* Check the distance to the robot */
+        double distance = sqrt( pow( (groundObjectPos.x - Pos.x), 2 ) + pow( (groundObjectPos.y - Pos.y), 2 ));
+        /* If distance in range */
+        if( distance < nearestDistance ){
+            ground = (CGroundArea*) (*it);
+            nearestDistance = distance;
+        }
+        it++;
+        groundFound = true;
+    }
 
-	if ( groundFound == true ) {
-		int object =  ground->GetObject();
-		return object;
-	}
+    if ( groundFound == true ) {
+        int object =  ground->GetObject();
+        return object;
+    }
 
-	return -1;
+    return -1;
 }
 
 /*****************************************************************************************************/
@@ -888,35 +888,35 @@ int CArena::GetObjectFromNearestGround (dVector2 Pos)
 
 int CArena::TakeObjectFromNearestGround (dVector2 Pos)
 {
-	vector<CGroundArea*>::iterator it=m_vecGroundArea.begin();
-	
-	CGroundArea* ground;
-	double nearestDistance = 10000;
-	bool groundFound = false;
-	/* get all the Light Objects */
-	while(it!=m_vecGroundArea.end()) {
-		/* Get the Light Object Position */
-		dVector2 groundObjectPos;
-		(*it)->GetCenter(&groundObjectPos);
-		/* Check the distance to the robot */
-		double distance = sqrt( pow( (groundObjectPos.x - Pos.x), 2 ) + pow( (groundObjectPos.y - Pos.y), 2 ));
-		/* If distance in range */
-		if( distance < nearestDistance ){
-			ground = (CGroundArea*) (*it);
-			nearestDistance = distance;
-		}
-		it++;
-		groundFound = true;
-	}
+    vector<CGroundArea*>::iterator it=m_vecGroundArea.begin();
+    
+    CGroundArea* ground;
+    double nearestDistance = 10000;
+    bool groundFound = false;
+    /* get all the Light Objects */
+    while(it!=m_vecGroundArea.end()) {
+        /* Get the Light Object Position */
+        dVector2 groundObjectPos;
+        (*it)->GetCenter(&groundObjectPos);
+        /* Check the distance to the robot */
+        double distance = sqrt( pow( (groundObjectPos.x - Pos.x), 2 ) + pow( (groundObjectPos.y - Pos.y), 2 ));
+        /* If distance in range */
+        if( distance < nearestDistance ){
+            ground = (CGroundArea*) (*it);
+            nearestDistance = distance;
+        }
+        it++;
+        groundFound = true;
+    }
 
-	if ( groundFound == true ) {
-		int object =  ground->GetObject();
-		// Remove object
-		ground->SetObject(-1);
-		return object;
-	}
+    if ( groundFound == true ) {
+        int object =  ground->GetObject();
+        // Remove object
+        ground->SetObject(-1);
+        return object;
+    }
 
-	return -1;
+    return -1;
 }
 
 /*****************************************************************************************************/
@@ -924,27 +924,27 @@ int CArena::TakeObjectFromNearestGround (dVector2 Pos)
 
 void CArena::LeaveObjectInNearestGround (dVector2 Pos, int object)
 {
-	vector<CGroundArea*>::iterator it=m_vecGroundArea.begin();
+    vector<CGroundArea*>::iterator it=m_vecGroundArea.begin();
 
-	CGroundArea* ground;
-	double nearestDistance = 10000;
-	bool groundFound = false;
-	/* get all the Light Objects */
-	while(it!=m_vecGroundArea.end()) {
-		/* Get the Light Object Position */
-		dVector2 groundObjectPos;
-		(*it)->GetCenter(&groundObjectPos);
-		/* Check the distance to the robot */
-		double distance = sqrt( pow( (groundObjectPos.x - Pos.x), 2 ) + pow( (groundObjectPos.y - Pos.y), 2 ));
-		/* If distance in range */
-		if( distance < nearestDistance ){
-			ground = (CGroundArea*) (*it);
-			nearestDistance = distance;
-		}
-		it++;
-		groundFound = true;
-	}
+    CGroundArea* ground;
+    double nearestDistance = 10000;
+    bool groundFound = false;
+    /* get all the Light Objects */
+    while(it!=m_vecGroundArea.end()) {
+        /* Get the Light Object Position */
+        dVector2 groundObjectPos;
+        (*it)->GetCenter(&groundObjectPos);
+        /* Check the distance to the robot */
+        double distance = sqrt( pow( (groundObjectPos.x - Pos.x), 2 ) + pow( (groundObjectPos.y - Pos.y), 2 ));
+        /* If distance in range */
+        if( distance < nearestDistance ){
+            ground = (CGroundArea*) (*it);
+            nearestDistance = distance;
+        }
+        it++;
+        groundFound = true;
+    }
 
-	if ( groundFound == true )
-		ground->SetObject(object);
+    if ( groundFound == true )
+        ground->SetObject(object);
 }

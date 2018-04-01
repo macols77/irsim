@@ -30,18 +30,18 @@ public:
     // Get the sensor type:
     virtual unsigned int GetType();
 
-		//Compute Readings
-		double* ComputeSensorReadings(CEpuck* pc_epuck, CSimulator* pc_simulator);
-	 	
-		//Get Reading
-		double* GetSensorReading( CEpuck *pc_epuck);
-		
-		char* getGroundAreaName( CEpuck *pc_epuck );
+        //Compute Readings
+        double* ComputeSensorReadings(CEpuck* pc_epuck, CSimulator* pc_simulator);
+         
+        //Get Reading
+        double* GetSensorReading( CEpuck *pc_epuck);
+        
+        char* getGroundAreaName( CEpuck *pc_epuck );
 
-		void Reset();
+        void Reset();
     
 protected:
-		float m_fStatus;
+        float m_fStatus;
 };
 
 /******************************************************************************/

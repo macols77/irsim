@@ -18,28 +18,28 @@ public:
     void SimulationStep(unsigned n_step_number, double f_time, double f_step_interval);
 
 private:
-		/* ROBOT */
+    /* ROBOT */
     CEpuck* m_pcEpuck;
    
-	 	/* SENSORS */
-		CWheelsActuator* m_acWheels;
+     /* SENSORS */
+    CWheelsActuator* m_acWheels;
     CEpuckProximitySensor* m_seProx;
-		CRealLightSensor* m_seLight;
-		CRealBlueLightSensor* m_seBlueLight;
-		CRealRedLightSensor* m_seRedLight;
-		CContactSensor* m_seContact;
-		CGroundSensor* m_seGround;
-		CGroundMemorySensor* m_seGroundMemory;
-		CBatterySensor* m_seBattery;
+    CRealLightSensor* m_seLight;
+    CRealBlueLightSensor* m_seBlueLight;
+    CRealRedLightSensor* m_seRedLight;
+    CContactSensor* m_seContact;
+    CGroundSensor* m_seGround;
+    CGroundMemorySensor* m_seGroundMemory;
+    CBatterySensor* m_seBattery;
     CRedBatterySensor* m_seRedBattery;
-		CEncoderSensor* m_seEncoder;
+    CEncoderSensor* m_seEncoder;
 
-		/* Global Variables */
-		double 		m_fLeftSpeed;
-		double 		m_fRightSpeed;
-		double**	m_fActivationTable;
-		int 			m_nWriteToFile;
-		double 		m_fTime;
+    /* Global Variables */
+    double 		m_fLeftSpeed;
+    double 		m_fRightSpeed;
+    double**	m_fActivationTable;
+    int 			m_nWriteToFile;
+    double 		m_fTime;
     double    fBattToForageInhibitor;
     double    fMoneyToForageInhibitor;
     double    fDeliverToSwitchOffInhibitor;
@@ -73,26 +73,26 @@ private:
     bool      m_bIsInPrey;
 
     int       m_nPathPlanningDone;
-		/* Functions */
+    /* Functions */
 
-		void ExecuteBehaviors   ( void );
-		void Coordinator        ( void );
+    void ExecuteBehaviors   ( void );
+    void Coordinator        ( void );
 
     void CalcPositionAndOrientation ( double *f_encoder );
     string  pathFind                ( const int &xStart, const int &yStart, const int &xFinish, const int &yFinish );
   
     void PrintMap ( int *print_map  );
     /* Behaviors */
-		void ObstacleAvoidance     ( unsigned int un_priority );
-		void Navigate              ( unsigned int un_priority );
-		void GoLoad                ( unsigned int un_priority );
+    void ObstacleAvoidance     ( unsigned int un_priority );
+    void Navigate              ( unsigned int un_priority );
+    void GoLoad                ( unsigned int un_priority );
 
     void GoGetMoney            ( unsigned int un_priority );
     void GoBlueLight           ( unsigned int un_priority );
 
     void ComputeActualCell     ( unsigned int un_priority );
     void PathPlanning          ( unsigned int un_priority );
-		void GoGetOrDeliverObject  ( unsigned int un_priority );
+    void GoGetOrDeliverObject  ( unsigned int un_priority );
 
     /* Helpers */
     bool IsPreyAlreadyChecked(dVector2* position);

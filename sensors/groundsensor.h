@@ -30,24 +30,24 @@ public:
     // Get the sensor type:
     virtual unsigned int GetType();
 
-		//Compute Readings
-		double* ComputeSensorReadings(CEpuck* pc_epuck, CSimulator* pc_simulator);
-	 	
-		//Get Reading
-		double* GetSensorReading( CEpuck *pc_epuck);
-		
-		char* getGroundAreaName( CEpuck *pc_epuck );
+        //Compute Readings
+        double* ComputeSensorReadings(CEpuck* pc_epuck, CSimulator* pc_simulator);
+         
+        //Get Reading
+        double* GetSensorReading( CEpuck *pc_epuck);
+        
+        char* getGroundAreaName( CEpuck *pc_epuck );
     
-		static unsigned int SENSOR_NUMBER;
+        static unsigned int SENSOR_NUMBER;
 
-		// Get object from nearest ground area
-		int GetObjectFromNearestGround();
-		int TakeObjectFromNearestGround();
-		void LeaveObjectInNearestGround(int object);
+        // Get object from nearest ground area
+        int GetObjectFromNearestGround();
+        int TakeObjectFromNearestGround();
+        void LeaveObjectInNearestGround(int object);
 
 protected:
-		CArena* m_pcArena;
-		CEpuck* m_pcEpuck;
+        CArena* m_pcArena;
+        CEpuck* m_pcEpuck;
 };
 
 /******************************************************************************/
