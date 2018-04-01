@@ -211,11 +211,11 @@ CIri1Controller::CIri1Controller (const char* pch_name, CEpuck* pc_epuck, int n_
   fDeliverToSwitchOffInhibitor = 1.0;
 
   /* Initialize Activation Table */
-	m_fActivationTable = new double* [BEHAVIORS];
-	for ( int i = 0 ; i < BEHAVIORS ; i++ )
-	{
-		m_fActivationTable[i] = new double[3];
-	}
+  m_fActivationTable = new double* [BEHAVIORS];
+  for ( int i = 0 ; i < BEHAVIORS ; i++ )
+  {
+	  m_fActivationTable[i] = new double[3];
+  }
   
   /* Odometry */
   m_nState              = 0;
@@ -1057,7 +1057,6 @@ void CIri1Controller::GoGetOrDeliverObject ( unsigned int un_priority )
       m_nNestFound  = 0;
       m_nPreyFound  = 0;
       m_nState      = 0;
-      m_nDeliverStatus = 0;
       m_vecPrey.clear();
       m_vecPreyNotChecked.clear();
       return;
