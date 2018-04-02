@@ -455,7 +455,8 @@ void CIri1Controller::Navigate(unsigned int un_priority) {
     double randomizeMovement = (double) rand() / RAND_MAX;
 
     if (randomizeMovement < RANDOM_NAVIGATION
-        && (m_nDeliverStatus != 3 || m_fActivationTable[4][2] == 1.0)
+        && !m_fActivationTable[GO_GOAL_PRIORITY][2] == 1.0
+        && !m_fActivationTable[GO_SWITCH_OFF_BLUE_LIGHT][2] == 1.0
         && fMoneyToForageInhibitor == 1.0
         && fBattToForageInhibitor == 1.0) {
 
