@@ -74,9 +74,9 @@ using namespace std;
 
 #define BEHAVIORS    7
 
-#define AVOID_PRIORITY               0
-#define RELOAD_PRIORITY           1
-#define FORAGE_PRIORITY               2
+#define AVOID_PRIORITY           0
+#define RELOAD_PRIORITY          1
+#define FORAGE_PRIORITY          2
 #define NAVIGATE_PRIORITY        3
 #define GO_GOAL_PRIORITY         4
 #define GO_MONEY_PRIORITY        5
@@ -105,7 +105,7 @@ using namespace std;
 
 #define BLUE_OBJECT 1
 
-#define RANDOM_NAVIGATION 1
+#define RANDOM_NAVIGATION 0.5
 
 /******************************************************************************/
 /******************************************************************************/
@@ -331,12 +331,12 @@ void CIri1Controller::ExecuteBehaviors(void) {
     ObstacleAvoidance(AVOID_PRIORITY);
     GoLoad(RELOAD_PRIORITY);
 
+    GoGetMoney(GO_MONEY_PRIORITY);
+
     ComputeActualCell(GO_GOAL_PRIORITY);
     PathPlanning(GO_GOAL_PRIORITY);
     GoGetOrDeliverObject(GO_GOAL_PRIORITY);
     GoBlueLight(GO_SWITCH_OFF_BLUE_LIGHT);
-
-    GoGetMoney(GO_MONEY_PRIORITY);
 
     Navigate(NAVIGATE_PRIORITY);
 }
@@ -617,51 +617,48 @@ void CIri1Controller::GoGetMoney(unsigned int un_priority) {
 /******************************************************************************/
 
 void CIri1Controller::GoBlueLight(unsigned int un_priority) {
-    // If we have to switch off the light..
-    if (m_nDeliverStatus == 3) {
-
-        /* Leer Sensores de Luz roja */
-        double *blueLight = m_seBlueLight->GetSensorReading(m_pcEpuck);
+    /* Leer Sensores de Luz roja */
+    double *blueLight = m_seBlueLight->GetSensorReading(m_pcEpuck);
 
 
-        /* We call vRepelent to go similar to Obstacle Avoidance, although it is an aproaching vector */
-        dVector2 vRepelent;
-        vRepelent.x = 0.0;
-        vRepelent.y = 0.0;
+    /* We call vRepelent to go similar to Obstacle Avoidance, although it is an aproaching vector */
+    dVector2 vRepelent;
+    vRepelent.x = 0.0;
+    vRepelent.y = 0.0;
 
-        double fMaxLight = 0.0;
-        const double *lightDirections = m_seBlueLight->GetSensorDirections();
+    double fMaxLight = 0.0;
+    const double *lightDirections = m_seBlueLight->GetSensorDirections();
 
-        for (int i = 0; i < m_seBlueLight->GetNumberOfInputs(); i++) {
-            vRepelent.x += blueLight[i] * cos(lightDirections[i]);
-            vRepelent.y += blueLight[i] * sin(lightDirections[i]);
+    for (int i = 0; i < m_seBlueLight->GetNumberOfInputs(); i++) {
+        vRepelent.x += blueLight[i] * cos(lightDirections[i]);
+        vRepelent.y += blueLight[i] * sin(lightDirections[i]);
 
-            if (blueLight[i] > fMaxLight)
-                fMaxLight = blueLight[i];
-        }
+        if (blueLight[i] > fMaxLight)
+            fMaxLight = blueLight[i];
+    }
 
-        /* Calc pointing angle */
-        float fAngle = atan2(vRepelent.y, vRepelent.x);
+    /* Calc pointing angle */
+    float fAngle = atan2(vRepelent.y, vRepelent.x);
 
-        /* Normalize angle */
-        while (fAngle > M_PI) fAngle -= 2 * M_PI;
-        while (fAngle < -M_PI) fAngle += 2 * M_PI;
+    /* Normalize angle */
+    while (fAngle > M_PI) fAngle -= 2 * M_PI;
+    while (fAngle < -M_PI) fAngle += 2 * M_PI;
 
-        m_fActivationTable[un_priority][0] = fAngle;
-        m_fActivationTable[un_priority][1] = 1 - fMaxLight;
+    m_fActivationTable[un_priority][0] = fAngle;
+    m_fActivationTable[un_priority][1] = 1 - fMaxLight;
 
-        // We've just arrived to the light, so turn off it.
-        if (fBattToForageInhibitor * fMoneyToForageInhibitor * fMaxLight > 0.8) {
-            m_seBlueLight->SwitchNearestLight(0);
-            m_fActivationTable[un_priority][2] = 0.0;
-            // we find the light so reset status
+    // We've just arrived to the light, so turn off it.
+    if (fBattToForageInhibitor * fMoneyToForageInhibitor * fDeliverToSwitchOffInhibitor * fMaxLight > 0.8) {
+        m_seBlueLight->SwitchNearestLight(0);
+        m_fActivationTable[un_priority][2] = 0.0;
+        // we find the light so reset status
             m_nDeliverStatus = 0;
-            m_nPacketsAttended++;
-        } else if (fBattToForageInhibitor * fMoneyToForageInhibitor * fMaxLight > 0.1) {
-            /* Set Leds to GREEN */
-            m_pcEpuck->SetAllColoredLeds(LED_COLOR_BLUE);
-            /* Mark Behavior as active */
-            m_fActivationTable[un_priority][2] = 1.0;
+        m_nPacketsAttended++;
+    } else if (fBattToForageInhibitor * fMoneyToForageInhibitor * fDeliverToSwitchOffInhibitor * fMaxLight > 0.1) {
+        /* Set Leds to GREEN */
+        m_pcEpuck->SetAllColoredLeds(LED_COLOR_BLUE);
+        /* Mark Behavior as active */
+        m_fActivationTable[un_priority][2] = 1.0;
         }
     }
 }
@@ -705,6 +702,11 @@ void CIri1Controller::ComputeActualCell(unsigned int un_priority) {
                 break;
             }
         }
+    }
+    
+    // Wait for turning off the light
+    if (m_nDeliverStatus == 1 || m_nDeliverStatus == 2) {
+        fDeliverToSwitchOffInhibitor = 0.0;
     }
 
     CalcPositionAndOrientation(encoder);
@@ -869,7 +871,7 @@ void CIri1Controller::PathPlanning(unsigned int un_priority) {
             map[x][y] = NO_OBSTACLE;
 
 
-    if (m_nNestFound == 1 && m_nPreyFound == 1 && m_nPathPlanningDone == 0) {
+    if (m_nNestFound == 1 && m_nPreyFound == 1 && m_nPathPlanningDone == 0 && (m_nDeliverStatus == 1 || m_nDeliverStatus == 2)) {
         printf("Doing path planning\n");
         m_nPathPlanningStops = 0;
         m_fActivationTable[un_priority][2] = 1;
