@@ -1065,6 +1065,7 @@ void CIri1Controller::GoGetOrDeliverObject(unsigned int un_priority) {
         if (m_nState >= m_nPathPlanningStops) {
             m_nNestFound = 0;
             m_nPreyFound = 0;
+            m_nPathPlanningDone = 0;
             m_nState = 0;
             m_vecPrey.clear();
             m_vecPreyNotChecked.clear();
