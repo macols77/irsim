@@ -44,6 +44,8 @@ private:
     double    fMoneyToForageInhibitor;
     double    fDeliverToSwitchOffInhibitor;
     double    fLastRandomMovement;  // Ensure convergence
+    double    fDeliverToRandomizerInhibitor;
+    double    fBlueLightToRandomizerInhibitor;
    
     /* Odometry */
     float     m_fOrientation; 

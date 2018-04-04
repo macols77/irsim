@@ -214,6 +214,9 @@ CIri1Controller::CIri1Controller(const char *pch_name, CEpuck *pc_epuck, int n_w
     fBattToForageInhibitor = 1.0;
     fMoneyToForageInhibitor = 1.0;
     fDeliverToSwitchOffInhibitor = 1.0;
+    fLastRandomMovement = 0.0;
+    fDeliverToRandomizerInhibitor = 1.0;
+    fBlueLightToRandomizerInhibitor = 1.0;
 
     /* Initialize Activation Table */
     m_fActivationTable = new double *[BEHAVIORS];
@@ -260,7 +263,6 @@ CIri1Controller::CIri1Controller(const char *pch_name, CEpuck *pc_epuck, int n_w
 
     m_nStepTime = 0;
     m_nPacketsAttended = 0;
-    fLastRandomMovement = 0.0;
 }
 
 /******************************************************************************/
@@ -323,6 +325,8 @@ void CIri1Controller::ExecuteBehaviors(void) {
     fBattToForageInhibitor = 1.0;
     fMoneyToForageInhibitor = 1.0;
     fDeliverToSwitchOffInhibitor = 1.0;
+    fDeliverToRandomizerInhibitor = 1.0;
+    fBlueLightToRandomizerInhibitor = 1.0;
 
     /* Set Leds to BLACK */
     m_pcEpuck->SetAllColoredLeds(LED_COLOR_BLACK);
@@ -455,9 +459,9 @@ void CIri1Controller::Navigate(unsigned int un_priority) {
     double randomizeMovement = (double) rand() / RAND_MAX;
 
     if (randomizeMovement < RANDOM_NAVIGATION
-        && !m_fActivationTable[GO_GOAL_PRIORITY][2] == 1.0
-        && !m_fActivationTable[GO_SWITCH_OFF_BLUE_LIGHT][2] == 1.0
+        && fDeliverToRandomizerInhibitor == 1.0
         && fMoneyToForageInhibitor == 1.0
+        && fBlueLightToRandomizerInhibitor == 1.0
         && fBattToForageInhibitor == 1.0) {
 
         float angle = m_fActivationTable[un_priority][0];
@@ -609,7 +613,6 @@ void CIri1Controller::GoGetMoney(unsigned int un_priority) {
 
         // Inhibite object movement.
         fMoneyToForageInhibitor = 0.0;
-
     }
 }
 
@@ -648,19 +651,22 @@ void CIri1Controller::GoBlueLight(unsigned int un_priority) {
     m_fActivationTable[un_priority][1] = 1 - fMaxLight;
 
     // We've just arrived to the light, so turn off it.
-    if (fBattToForageInhibitor * fMoneyToForageInhibitor * fDeliverToSwitchOffInhibitor * fMaxLight > 0.8) {
+    if (fBattToForageInhibitor * fMoneyToForageInhibitor * fDeliverToSwitchOffInhibitor * fMaxLight > 0.9) {
         m_seBlueLight->SwitchNearestLight(0);
         m_fActivationTable[un_priority][2] = 0.0;
         // we find the light so reset status
-            m_nDeliverStatus = 0;
+        m_nDeliverStatus = 0;
+        fDeliverToRandomizerInhibitor = 1.0;
+        fBlueLightToRandomizerInhibitor = 1.0;
         m_nPacketsAttended++;
     } else if (fBattToForageInhibitor * fMoneyToForageInhibitor * fDeliverToSwitchOffInhibitor * fMaxLight > 0.1) {
         /* Set Leds to GREEN */
         m_pcEpuck->SetAllColoredLeds(LED_COLOR_BLUE);
         /* Mark Behavior as active */
         m_fActivationTable[un_priority][2] = 1.0;
-        }
+        fBlueLightToRandomizerInhibitor = 0.0;
     }
+
 }
 
 /******************************************************************************/
@@ -677,7 +683,6 @@ void CIri1Controller::ComputeActualCell(unsigned int un_priority) {
     printf("Deliver status %d\n", m_nDeliverStatus);
 
     if (m_nDeliverStatus == 0) {
-
         /* Leer Sensores de Luz azul */
         double *blueLight = m_seBlueLight->GetSensorReading(m_pcEpuck);
 
@@ -779,13 +784,12 @@ void CIri1Controller::ComputeActualCell(unsigned int un_priority) {
 
         // update deliver status
         if (m_nDeliverStatus == 1 && !m_bIsInPrey &&
-            (m_nPathPlanningDone == 0 || (m_nPathPlanningDone == 1 && SeemsToBeInTheRightPrey()))) {
+                (m_nPathPlanningDone == 0 || (m_nPathPlanningDone == 1 && SeemsToBeInTheRightPrey()))) {
             int objectInGround = m_seGround->GetObjectFromNearestGround();
             // if this prey has the right object, take it
             if (objectInGround == BLUE_OBJECT) {
                 m_nDeliverStatus = 2;
                 m_seGround->TakeObjectFromNearestGround();
-
                 printf("Ground actually has the object\n");
                 // Reset path planning to go now to the nest.
                 m_nPathPlanningDone = 0;
@@ -798,26 +802,19 @@ void CIri1Controller::ComputeActualCell(unsigned int un_priority) {
                     m_vecPreyNotChecked.erase(m_vecPreyNotChecked.begin());
                     printf("removed, there are left %d\n", m_vecPreyNotChecked.size());
 
-                    if (m_vecPreyNotChecked.size() > 0) {
-                        vector<dVector2>::iterator it = m_vecPreyNotChecked.begin();
-                        while (it != m_vecPreyNotChecked.end()) {
-                            printf("Prey position [%2.2f,%2.2f]\n", (it)->x, (it)->y);
-                            it++;
-                        }
-
-                        m_nActualPreyGridX = m_vecPreyNotChecked.front().x;
-                        m_nActualPreyGridY = m_vecPreyNotChecked.front().y;
-                        /* Asumme Path Planning is done */
-                        m_nPathPlanningDone = 0;
-                        /* Restart PathPlanning state */
-                        m_nState = 0;
-                    } else {
-                        printf("No more elements in list..\n");
-                        m_nPreyFound = 0;
+                    vector<dVector2>::iterator it = m_vecPreyNotChecked.begin();
+                    while (it != m_vecPreyNotChecked.end()) {
+                        printf("Prey position [%2.2f,%2.2f]\n", (it)->x, (it)->y);
+                        it++;
                     }
+                    m_nActualPreyGridX = m_vecPreyNotChecked.front().x;
+                    m_nActualPreyGridY = m_vecPreyNotChecked.front().y;
+                    /* Asumme Path Planning is done */
+                    m_nPathPlanningDone = 0;
+                    /* Restart PathPlanning state */
+                    m_nState = 0;
                 } else {
-                    printf("Prey doesn't have the object and there are no more objects\n");
-                    // We didn't find the correct prey so first try to find it.
+                    printf("No more elements in list..\n");
                     m_nPreyFound = 0;
                 }
             }
@@ -838,7 +835,7 @@ void CIri1Controller::ComputeActualCell(unsigned int un_priority) {
 
 bool CIri1Controller::IsPreyAlreadyChecked(dVector2 *preyPosition) {
     vector<dVector2>::iterator it = m_vecPrey.begin();
-    printf("Size of vecPrey %d", m_vecPrey.size());
+    printf("Size of vecPrey %u\n", m_vecPrey.size());
 
     while (it != m_vecPrey.end()) {
 
@@ -879,7 +876,7 @@ void CIri1Controller::PathPlanning(unsigned int un_priority) {
     if (m_nNestFound == 1 && m_nPreyFound == 1 && m_nPathPlanningDone == 0 && (m_nDeliverStatus == 1 || m_nDeliverStatus == 2)) {
         printf("Doing path planning\n");
         m_nPathPlanningStops = 0;
-        m_fActivationTable[un_priority][2] = 1;
+        m_fActivationTable[un_priority][2] = 1.0;
 
         /* Obtain start and end desired position */
         int xA, yA, xB, yB;
@@ -1099,8 +1096,12 @@ void CIri1Controller::GoGetOrDeliverObject(unsigned int un_priority) {
         while (fGoalDirection < -M_PI) fGoalDirection += 2 * M_PI;
 
         m_fActivationTable[un_priority][0] = fGoalDirection;
-        m_fActivationTable[un_priority][1] = 1;
-        m_fActivationTable[un_priority][2] = 1;
+        m_fActivationTable[un_priority][1] = 1.0;
+        m_fActivationTable[un_priority][2] = 1.0;
+
+        fDeliverToRandomizerInhibitor = 0.0;
+    } else {
+        fDeliverToRandomizerInhibitor = 1.0;
     }
 }
 
