@@ -21,11 +21,7 @@ h = stem(X, Y, 'filled', 'LineStyle', 'none', 'Marker', '.');
 xlabel('Samples');
 title (sprintf("Probabillity of random movement: %1.4f", A(from, 1)));
 from = from + nSamples;
-h(1).Color = 'red';
-h(2).Color = 'blue';
-h(3).Color = 'red';
-h(4).Color = 'blue';
-h(5).Color = 'red';
-h(6).Color = 'blue';
+[h(1).Color, h(3).Color, h(5).Color] = deal('red');
+[h(2).Color, h(4).Color, h(6).Color] = deal('blue');
 legend('Objects','Path')
 end

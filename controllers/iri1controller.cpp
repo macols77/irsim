@@ -467,10 +467,10 @@ void CIri1Controller::Navigate(unsigned int un_priority) {
         float angle = m_fActivationTable[un_priority][0];
 
         if (fLastRandomMovement == 1.0) {
-            angle += M_PI;
+            angle += M_PI/4;
             fLastRandomMovement = 0.0;
         } else {
-            angle -= M_PI;
+            angle -= M_PI/4;
             fLastRandomMovement = 1.0;
         }
 
@@ -796,27 +796,35 @@ void CIri1Controller::ComputeActualCell(unsigned int un_priority) {
                 /* Restart PathPlanning state */
                 m_nState = 0;
             } else {
-                // Go to next prey if exists
+            	// Go to next prey if exists
                 if (m_vecPreyNotChecked.size() > 0) {
 
                     m_vecPreyNotChecked.erase(m_vecPreyNotChecked.begin());
                     printf("removed, there are left %d\n", m_vecPreyNotChecked.size());
+                	
+	                if (m_vecPreyNotChecked.size() > 0) {
+	                    vector<dVector2>::iterator it = m_vecPreyNotChecked.begin();
 
-                    vector<dVector2>::iterator it = m_vecPreyNotChecked.begin();
-                    while (it != m_vecPreyNotChecked.end()) {
-                        printf("Prey position [%2.2f,%2.2f]\n", (it)->x, (it)->y);
-                        it++;
-                    }
-                    m_nActualPreyGridX = m_vecPreyNotChecked.front().x;
-                    m_nActualPreyGridY = m_vecPreyNotChecked.front().y;
-                    /* Asumme Path Planning is done */
-                    m_nPathPlanningDone = 0;
-                    /* Restart PathPlanning state */
-                    m_nState = 0;
-                } else {
-                    printf("No more elements in list..\n");
-                    m_nPreyFound = 0;
-                }
+	                    while (it != m_vecPreyNotChecked.end()) {
+	                        printf("Prey position [%2.2f,%2.2f]\n", (it)->x, (it)->y);
+	                        it++;
+	                    }
+
+	                    m_nActualPreyGridX = m_vecPreyNotChecked.front().x;
+	                    m_nActualPreyGridY = m_vecPreyNotChecked.front().y;
+	                    /* Asumme Path Planning is done */
+	                    m_nPathPlanningDone = 0;
+	                    /* Restart PathPlanning state */
+	                    m_nState = 0;
+	                } else {
+	                    printf("No more elements in list..\n");
+	                    m_nPreyFound = 0;
+	                }
+	            } else {
+	            	printf("Prey doesn't have the object and there are no more objects\n");
+                    // We didn't find the correct prey so first try to find it.
+					m_nPreyFound = 0;
+	            }
             }
         }
 
