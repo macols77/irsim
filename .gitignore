@@ -2,8 +2,8 @@
 *.a
 !/outputFiles/
 /outputFiles/*
-!/outputFiles/randomMovementOutput
+!/outputFiles/randomMovementOutputFinal
 !/outputFiles/Plotter*
-
+!/outputFiles/GRAPH*
 
 
