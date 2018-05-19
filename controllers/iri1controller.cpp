@@ -541,7 +541,7 @@ void CIri1Controller::GoLoad(unsigned int un_priority) {
         /* Inibit Forage */
         fBattToForageInhibitor = 0.0;
         /* Set Leds to RED */
-        m_pcEpuck->SetAllColoredLeds(LED_COLOR_RED);
+        m_pcEpuck->SetAllColoredLeds(LED_COLOR_YELLOW);
 
         /* Mark behavior as active */
         m_fActivationTable[un_priority][2] = 1.0;
@@ -607,7 +607,7 @@ void CIri1Controller::GoGetMoney(unsigned int un_priority) {
         }*/
 
         /* Set Leds to GREEN */
-        m_pcEpuck->SetAllColoredLeds(LED_COLOR_GREEN);
+        m_pcEpuck->SetAllColoredLeds(LED_COLOR_RED);
         /* Mark Behavior as active */
         m_fActivationTable[un_priority][2] = 1.0;
 
@@ -1046,7 +1046,7 @@ void CIri1Controller::PathPlanning(unsigned int un_priority) {
          * Notice we are only working with initial orientation = 0.0 */
         for (int i = 0; i < m_nPathPlanningStops; i++) {
             /* Traslation */
-            m_vPositionsPlanning[i].x += ((robotStartGridX * fXmov) - (mapGridX * fXmov) / 2);
+            m_vPositionsPlanning[i].x -= ((robotStartGridX * fXmov) - (mapGridX * fXmov) / 2);
             m_vPositionsPlanning[i].y += ((robotStartGridY * fXmov) - (mapGridY * fYmov) / 2);
             /* Rotation */
             //double compass = m_pcEpuck->GetRotation();
